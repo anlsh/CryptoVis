@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>The History of Cryptography</title>
+        <link rel="stylesheet" href="stylesheet.css" type="text/css" media="screen">
+        <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            window.onload = function () {
+
+                var viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                var viewport_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                function hScale(p1) {
+                    return p1 / 1442 * viewport_width;
+                }
+                function vScale(p2) {
+                    return p2 / 810 * viewport_height;
+                }
+
+                var r = Raphael("canvas", "100%", "100%");
+                r.rect(10, 10, 80, 80, 10).attr({fill: "#f00"});
+
+                //r.rect(0, 0, hScale(1400), vScale(750)).attr({fill: "#fff", stroke: "none"});
+                // -----------------------------------------------------------------------------------
+                // Anish Code now
+                // Both of the following lines work
+            };
+        </script>
+    </head>
+    <body>
+        <div id="titlebar">
+            Cryptography Through the Years
+        </div>
+        <div id="canvas"></div>
+        <p id="mini_info">Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library</p>
+    </body>
+</html>
+

@@ -1,0 +1,33 @@
+body {
+    background-color: #333;
+    color: #fff;
+    font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+    position: relative;
+}
+
+a {
+    color: #fff;
+}
+
+#canvas {
+    border-radius: 20px;
+    border: thick solid blue;
+    margin-left: 14px;
+    width: 95%;
+    height: 700px;
+}
+#titlebar {
+    width: 95%;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+#mini_info {
+    bottom: 0;
+    font-size: .7em;
+    position: absolute;
+    right: 1em;
+    text-align: right;
+}
