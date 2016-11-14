@@ -1,0 +1,135 @@
+{
+  "name": "Monosubstitution Cipher",
+  "start-year": 20,
+  "end-year": 1600,
+  "description": "Example dexcription",
+  "events":
+  [
+    {
+      "name": "start",
+      "description": "It got invented!"
+    },
+    {
+      "name": "Frequency Analysis Invented",
+      "description": "Freq Analysis Invention placeholder",
+      "year": 800
+    },
+    {
+      "name": "end",
+      "description": "Talk about the end of freq anal"
+    }
+  ],
+  "children": 
+  [
+    {
+      "name": "Nomenclators",
+      "start-year": 1500,
+      "end-year": 1600,
+      "desc": "Placeholder desc for nomenclators",
+      "events": 
+      [
+        {
+          "name": "start",
+          "description": "The invention of nomenclators"
+        },
+        {
+          "name": "end",
+          "description": "The end of nomenclators"
+        }
+      ],
+      "children": {}
+    }, 
+    {
+      "name": "Null Ciphers",
+      "start-year": 1500,
+      "end-year": 1800,
+      "description": "Placeholder for null cipher",
+      "events": 
+      [
+        {
+          "name": "start",
+          "description": "Null ciphers were invented!"
+        },
+        {
+          "name": "end",
+          "description": "These never really ended..."
+        }
+      ],
+      "children": []
+    },
+    {
+      "name": "Vigne're Cipher",
+      "start-year": 1400,
+      "end-year": 1870,
+      "description": "Placeholder desc for Vignere cipher",
+      "events":
+      [
+        {
+          "name": "start",
+          "description": "Invention of the Vigne're Cipher"
+        },
+        {
+          "name": "end",
+          "description": "The breaking of the Vigne're Cipher"
+        }
+      ],
+      "children":
+      [
+        {
+          "name": "Engima",
+          "start-year": 1940,
+          "end-year": 1945,
+          "description": "Description for Enigma",
+          "events":
+          [
+            {
+              "name": "start",
+              "description": "The invention of the Enigma"
+            },
+            {
+              "name": "end",
+              "description": "The end of the Enigma"
+            }
+          ],
+          "children": [
+            {
+              "name": "Lorenz Encryption",
+              "start-year": 1943,
+              "end-year": 1945,
+              "description": "Description for Lorenz Crypto",
+              "events": [
+                {
+                  "name": "start",
+                  "description": "Invention!"
+                },
+                {
+                  "name": "end",
+                  "description": "The fall of the Lorenz Cipher"
+                }
+              ],
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Purple",
+          "start-year": 1942,
+          "end-year": 1946,
+          "description": "Description for Purple",
+          "events": [
+            {
+              "name": "start",
+              "description": "The invention of Purple"
+
+            },
+            {
+              "name": "end",
+              "description": "The end of the Purple"
+            }
+          ],
+          "children": {}
+        }
+      ]
+    }
+  ]
+}
