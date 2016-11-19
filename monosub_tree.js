@@ -13,32 +13,73 @@
  }
  * */
 
+var px_per_year = .6;
+
+function draw_timeline(context, root_x = 100, root_y = 25) {
+    var number_of_years = 2016;
+    var major_tick_height = 30;
+
+    // Styles
+    var main_line_attr = {"stroke": "#FF0000", "stroke-width": 6};
+    var major_tick_attr = {"stroke": "#FF0000", "stroke-width": 6};
+
+    var year_label_offset_y = 30;
+    var year_label_attr = {"fill": "#FFF",
+        "font-size": "16px", "font-family": "Arial, Helvetica, sans-serif",
+        "text-anchor": "middle"};
+
+    var line = context.path("M " + root_x + " " + root_y + " l " + px_per_year * number_of_years + " 0");
+    line.attr(main_line_attr);
+
+    for (var qqq = 0; qqq < number_of_years; qqq++) {
+        if (qqq % 100 === 0) {
+            context.path("M " + (root_x + (qqq * px_per_year))+ " " +
+                (root_y - (major_tick_height / 2)) + " l 0 " + major_tick_height).attr(major_tick_attr);
+            context.text((root_x + (qqq * px_per_year)), root_y + year_label_offset_y, qqq).attr(year_label_attr);
+        }
+    }
+}
+
 function draw_tree(tree, context, root_x = 100, root_y = 100) {
-    var px_per_year = .6;
     var px_per_branch = 35;
     var default_fill_opacity = .4;
     var hover_fill_opacity = .75;
-    var text_offset_x = 5;
-    var text_offset_y = 20;
+
+    var branch_name_offset_x = 5;
+    var branch_name_offset_y = 20;
+    var branch_name_attr = {"fill": "#FFF",
+        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
+        "text-anchor": "start"};
+    var branch_name_attr_animation = {"fill": "#FF0"};
+
+    var temp_namebox_div;
+    var namebox_offset_y = -30;
+    var namebox_draw_attr = {"fill": "#FFF",
+        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
+        "text-anchor": "middle"};
 
     console.log("Drawing "+tree.name);
 
-    // Add the name of the branch to the, well, branch
-    //var branchName = document.createElement('div');
-    //branchName.innerHTML = "hi mom!";//tree.name;
-    //branchName.setAttribute('class', 'name_shower');
-    //document.getElementById("canvas").appendChild(branchName);
-    //document.body.canvas.appendChild(branchName);
-
-    context.path("M " + root_x + " " + root_y + " l " +
+    var path_ = context.path("M " + root_x + " " + root_y + " l " +
         (tree.end_year - tree.start_year) * px_per_year + " 0").attr({"stroke": "#FF0000", "stroke-width": 6});
+    path_.mouseover(function (event) {
+        // Put a little div at the mouse to tell them the branch name
+        temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
+            tree.name).attr(namebox_draw_attr);
+    });
+    path_.mousemove(function (event) {
+        temp_namebox_div.remove();
+        temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
+            tree.name).attr(namebox_draw_attr);
+    });
+    path_.mouseout(function () {
+        temp_namebox_div.remove();
+    });
 
-    var textThingy = context.text(root_x + text_offset_x, root_y + text_offset_y, tree.name);
-    textThingy.attr({"fill": "#FFF",
-        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
-        "text-anchor": "start"});
+    var textThingy = context.text(root_x + branch_name_offset_x, root_y + branch_name_offset_y, tree.name);
+    textThingy.attr(branch_name_attr);
     textThingy.mouseover(function () {
-       this.animate({"fill": "#FF0"}, 500)
+       this.animate(branch_name_attr_animation, 500)
     });
 
     for (var ee = 0; ee < tree.events.length; ee++) {
