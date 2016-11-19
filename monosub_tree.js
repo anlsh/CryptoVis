@@ -15,14 +15,31 @@
 
 function draw_tree(tree, context, root_x = 100, root_y = 100) {
     var px_per_year = .6;
-    var px_per_branch = 25;
+    var px_per_branch = 35;
     var default_fill_opacity = .4;
     var hover_fill_opacity = .75;
+    var text_offset_x = 5;
+    var text_offset_y = 20;
 
     console.log("Drawing "+tree.name);
 
+    // Add the name of the branch to the, well, branch
+    //var branchName = document.createElement('div');
+    //branchName.innerHTML = "hi mom!";//tree.name;
+    //branchName.setAttribute('class', 'name_shower');
+    //document.getElementById("canvas").appendChild(branchName);
+    //document.body.canvas.appendChild(branchName);
+
     context.path("M " + root_x + " " + root_y + " l " +
         (tree.end_year - tree.start_year) * px_per_year + " 0").attr({"stroke": "#FF0000", "stroke-width": 6});
+
+    var textThingy = context.text(root_x + text_offset_x, root_y + text_offset_y, tree.name);
+    textThingy.attr({"fill": "#FFF",
+        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
+        "text-anchor": "start"});
+    textThingy.mouseover(function () {
+       this.animate({"fill": "#FF0"}, 500)
+    });
 
     for (var ee = 0; ee < tree.events.length; ee++) {
         var curr_event = tree.events[ee];

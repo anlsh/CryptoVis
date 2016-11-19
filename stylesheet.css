@@ -9,9 +9,17 @@ a {
     color: #fff;
 }
 
+.name_shower {
+    background-color: yellow;
+    width: 30px;
+    position: absolute;
+    color: black;
+}
+
 #canvas {
     border-radius: 20px;
     border: thick solid blue;
+    position: relative;
     margin-left: 14px;
     width: 95%;
     height: 700px;
