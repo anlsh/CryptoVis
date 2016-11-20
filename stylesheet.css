@@ -1,29 +1,63 @@
 body {
-    background-color: #333;
-    color: #fff;
+    background-color: #F0F0F0;
+    color: #000;
     font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
     position: relative;
 }
 
 a {
-    color: #fff;
+    color: #00f;
 }
 
-.name_shower {
-    background-color: yellow;
-    width: 30px;
+.info {
+    padding: 10px;
+    padding-top: 5px;
+    overflow: hidden;
+}
+.info_heading {
+    font-size: 20px;
+    text-align: center;
+}
+.info_img {
+    width: 95%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.shadowed {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#slider_container {
     position: absolute;
-    color: black;
+    height: 100%;
+    width: 400px;
+    top: 0;
+    right: -400px;
+    fill-opacity: 0;
+    z-index: 99;
+}
+
+#infobox_container {
+    position: absolute;
+    height: auto;
+    width: 95%;
+    background-color: aqua;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
 }
 
 #canvas {
-    border-radius: 20px;
-    border: thick solid blue;
+    background-color: #F5F5F5;
+    border-radius: 0px;
     position: relative;
     margin-left: 14px;
     width: 95%;
     height: 700px;
+    overflow: hidden;
+    z-index: 1;
 }
+
 #titlebar {
     width: 95%;
     font-size: 30px;

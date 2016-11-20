@@ -5,9 +5,13 @@
         <title>The History of Cryptography</title>
         <link rel="stylesheet" href="stylesheet.css" type="text/css" media="screen">
         <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="jquery-3.1.1.min.js"></script>
         <script src="monosub_tree.js" type="text/javascript" charset="utf-8"></script>
+
         <script type="text/javascript" charset="utf-8">
             window.onload = function () {
+
+                INFO_BOX_WIDTH = 400;
 
                 var viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                 var viewport_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -30,6 +34,9 @@
                 document.getElementById("mini_info").innerHTML = get_leaves(monosub_tree);
                 draw_tree(monosub_tree, r);
                 draw_timeline(r);
+
+                $("#slider_container").width = INFO_BOX_WIDTH;
+                $("#slider_container").right = -1 * INFO_BOX_WIDTH;
             };
         </script>
     </head>
@@ -38,7 +45,11 @@
             Cryptography Through the Years
         </div>
 
-        <div id="canvas"></div>
+        <div id="canvas" class="shadowed">
+            <div id = "slider_container">
+                <div id="infobox_container" class="shadowed"></div>
+            </div>
+        </div>
         <p id="mini_info">Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library</p>
     </body>
 </html>
