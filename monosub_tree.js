@@ -17,7 +17,7 @@ var px_per_year = .6;
 
 function draw_timeline(context, root_x = 100, root_y = 25) {
 
-    var YEAR_OFFSET = 100
+    var YEAR_OFFSET = 100;
     // If you ever change that starting year... well, you'd better update the random offsets in this function
     var number_of_years = 2016 + YEAR_OFFSET;
     var major_tick_height = 30;
@@ -94,10 +94,20 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
             draw_x = root_x + (curr_event.year - tree.start_year) * px_per_year;
         }
 
-        // Draw events
+        for (var qq = 1; qq < tree.children.length + 1; qq++) {
+            var curr_branch = tree.children[qq -1];
+            context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*px_per_year)+" "+root_y+" l 0 "+
+                qq * px_per_branch).attr({"stroke": "#FF0000", "stroke-width": 6}).toBack();
+            draw_tree(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
+                root_y + qq * px_per_branch);
+        }
 
+        // Draw events
+        context.circle(draw_x, root_y, 10).attr(
+            {stroke: "#FFFFFF", fill: "#FFFFFF","fill-opacity": 1});
         var event_circle = context.circle(draw_x, root_y, 10).attr(
             {stroke: "#00FF00", fill: "#00FF00","fill-opacity": .4});
+        event_circle.toFront();
         event_circle.data("event_id", curr_event.id_);
 
         SLIDEOFF = "right";
@@ -106,7 +116,7 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
             this.animate({"fill-opacity": hover_fill_opacity});
             $("#slider_container").removeAttr("right left");
-            $("#infobox_container").load("infofiles/infofile" + this.data("event_id")+".html");
+            $("#infobox_container").load("infofiles/"+ this.data("event_id")+".html");
 
             if (event.offsetX < ($("#canvas").width() / 2)) {
 
@@ -134,14 +144,6 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
                 $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH});
             }
         });
-    }
-
-    for (var qq = 1; qq < tree.children.length + 1; qq++) {
-        var curr_branch = tree.children[qq -1];
-        context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*px_per_year)+" "+root_y+" l 0 "+
-                    qq * px_per_branch).attr({"stroke": "#FF0000", "stroke-width": 6});
-        draw_tree(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
-                    root_y + qq * px_per_branch);
     }
 
     var branch_namebox = context.text(root_x + branch_name_offset_x, root_y + branch_name_offset_y, tree.name);
@@ -192,11 +194,12 @@ var monosub_tree =
         {
             "name": "start",
             "description": "Some description for Caesar Ciphers",
-            "id_": 4
+            "id_": "caesar_invention"
         },
         {
             "name": "end",
-            "description": "The end of the Caesar Cipher?"
+            "description": "The end of the Caesar Cipher?",
+            "id_": "caesar_death"
         }
     ],
     "children":
@@ -212,18 +215,18 @@ var monosub_tree =
                 {
                     "name": "start",
                     "description": "It got invented!",
-                    'id_': 1
+                    'id_': "monosub_invention"
                 },
                 {
                     "name": "Frequency Analysis Invented",
                     "description": "Freq Analysis Invention placeholder",
                     "year": 800,
-                    'id_': 2
+                    'id_': "monosub_event_fa"
                 },
                 {
                     "name": "end",
                     "description": "Talk about the end of freq anal",
-                    "id_": 3
+                    "id_": "monosub_death"
                 }
             ],
             "children":
@@ -237,11 +240,13 @@ var monosub_tree =
                     [
                         {
                             "name": "start",
-                            "description": "The invention of nomenclators"
+                            "description": "The invention of nomenclators",
+                            "id_": "nomenclator_invention"
                         },
                         {
                             "name": "end",
-                            "description": "The end of nomenclators"
+                            "description": "The end of nomenclators",
+                            "id_": "nomenclator_death"
                         }
                     ],
                     "children": []
@@ -255,11 +260,13 @@ var monosub_tree =
                     [
                         {
                             "name": "start",
-                            "description": "Null ciphers were invented!"
+                            "description": "Null ciphers were invented!",
+                            "id_": "null_invention"
                         },
                         {
                             "name": "end",
-                            "description": "These never really ended..."
+                            "description": "These never really ended...",
+                            "id_": "null_death"
                         }
                     ],
                     "children": []
@@ -273,11 +280,13 @@ var monosub_tree =
                     [
                         {
                             "name": "start",
-                            "description": "Invention of the Vigne're Cipher"
+                            "description": "Invention of the Vigne're Cipher",
+                            "id_": "vignere_invention"
                         },
                         {
                             "name": "end",
-                            "description": "The breaking of the Vigne're Cipher"
+                            "description": "The breaking of the Vigne're Cipher",
+                            "id_": "vigenere_death"
                         }
                     ],
                     "children":
@@ -291,11 +300,13 @@ var monosub_tree =
                             [
                                 {
                                     "name": "start",
-                                    "description": "The invention of the Enigma"
+                                    "description": "The invention of the Enigma",
+                                    "id_": "enigma_invention"
                                 },
                                 {
                                     "name": "end",
-                                    "description": "The end of the Enigma"
+                                    "description": "The end of the Enigma",
+                                    "id_": "enigma_death"
                                 }
                             ],
                             "children":
@@ -309,7 +320,8 @@ var monosub_tree =
                                     [
                                         {
                                             "name": "start",
-                                            "description": "Invention!"
+                                            "description": "Invention!",
+                                            "id_": "lorenz_invention"
                                         },
                                         {
                                             "name": "end",

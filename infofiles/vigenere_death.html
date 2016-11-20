@@ -1,0 +1,19 @@
+<div class="info">
+    <p class="info_heading">The Kasiki-Babbage Test</p>
+    <p>After nearly three centuries of total security, Charles Babbage and Freidrich Kasiki cracked the cipher
+    independently during the mid-1800's. The attack hinges upon being able to find repeated strings within the
+    characters. For instance, take the following ciphertext</p>
+    <div class="mini_code">
+        <strong>FGX</strong>WENFJFRDSG<strong>FGX</strong>JFGXWEJLJK<strong>FGX</strong>JJKWEJNKJG
+    </div>
+    <p>The savvy codebreaker will notice that the sequence FGX, which might correspond to a common three-letter sequence
+        in English such as "the", is repeated every thirteenth letter. Such a repetition strongly indicates that a
+    thirteen-letter key is being used. After this, all that remains is to break the original ciphertext into thirteen
+    subgroups, with the first subgroup consisting of the first letter of each thirteen-letter block (WJJ), the second consisting of the
+    second letters (EFJ), and so on.</p>
+    <p>These subgroups of letters have effectively been enciphered with monosubstitution ciphers, and thus by applying
+    frequency analysis we can decipher the subgroups and therefore the Vigenere Cipher</p>
+    <p>Note: While the method described above works in principle, the ciphertext given is simply too small to be
+    deciphered. For a more complete look at how to crack the Vigenere Cipher, check out
+        <a href="http://www.cs.mtu.edu/~shene/NSF-4/Tutorial/VIG/Vig-Frequency-Analysis.html"> this website</a></p>
+</div>

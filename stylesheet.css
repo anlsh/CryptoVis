@@ -9,6 +9,19 @@ a {
     color: #00f;
 }
 
+.mini_code {
+    width: 90%;
+    margin: auto;
+    padding: 5px;
+    word-wrap: break-word;
+    font-family: Courier, serif;
+    background-color: #FFF8DC;
+    fill: #FFF8DC;
+}
+#vigenere {
+    width: 50%;
+    height: auto;
+}
 .info {
     padding: 10px;
     padding-top: 5px;
