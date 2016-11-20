@@ -272,7 +272,7 @@ var monosub_tree =
                     "children": []
                 },
                 {
-                    "name": "Vigne're Cipher",
+                    "name": "Vigenere Cipher",
                     "start_year": 1400,
                     "end_year": 1920,
                     "description": "Placeholder desc for Vignere cipher",
@@ -325,7 +325,8 @@ var monosub_tree =
                                         },
                                         {
                                             "name": "end",
-                                            "description": "The fall of the Lorenz Cipher"
+                                            "description": "The fall of the Lorenz Cipher",
+                                            "id_": "lorenz_death"
                                         }
                                     ],
                                     "children": []
@@ -341,12 +342,14 @@ var monosub_tree =
                             [
                                 {
                                     "name": "start",
-                                    "description": "The invention of Purple"
+                                    "description": "The invention of Purple",
+                                    "id_": "purple_invention"
 
                                 },
                                 {
                                     "name": "end",
-                                    "description": "The end of the Purple"
+                                    "description": "The end of the Purple",
+                                    "id_": "purple_death"
                                 }
                             ],
                             "children": []
