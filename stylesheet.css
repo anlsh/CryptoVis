@@ -1,8 +1,11 @@
 body {
     background-color: #F0F0F0;
     color: #000;
-    font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
-    position: relative;
+    //font: 300
+    //100.1%
+    //"Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+    font-family: "Lucidia Console", Monaco, monospace;
+    //position: relative;
 }
 
 a {
@@ -21,11 +24,16 @@ a {
 .info_img {
     width: 95%;
     height: auto;
-    margin: 0 auto;
+    //margin: 0 auto;
+    margin: auto;
 }
 
 .shadowed {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.2);
+        //, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.reverse_shadowed {
+    box-shadow: 0px -8px 8px 0px rgba(0, 0, 0, 0.15);
 }
 
 #slider_container {
@@ -42,16 +50,23 @@ a {
     position: absolute;
     height: auto;
     width: 95%;
-    background-color: aqua;
-    top: 50%; left: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    top: 50%;
+    left: 50%;
     transform: translate(-50%,-50%);
+    margin: auto;
+    //overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #canvas {
-    background-color: #F5F5F5;
-    border-radius: 0px;
+    //background-color: #F5F5F5;
+    background-color: rgba(245, 245, 245, 0.75);
+    //border-radius: 0px;
     position: relative;
-    margin-left: 14px;
+    //margin-left: 14px;
+    margin: auto;
+    margin-top: 0px;
     width: 95%;
     height: 700px;
     overflow: hidden;
@@ -62,14 +77,31 @@ a {
     width: 95%;
     font-size: 30px;
     text-align: center;
+    margin: auto;
     margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    text-align: center;
+    background-color: rgba(245, 245, 245, .75);
 }
 
 #mini_info {
-    bottom: 0;
     font-size: .7em;
     position: absolute;
-    right: 1em;
+    bottom: 0px;
+    right: 0px;
     text-align: right;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+#background {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    word-wrap: break-word;
+    overflow-y: hidden;
+    color: #AAA;
+    z-index: -1;
 }

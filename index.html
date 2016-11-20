@@ -7,7 +7,7 @@
         <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="jquery-3.1.1.min.js"></script>
         <script src="monosub_tree.js" type="text/javascript" charset="utf-8"></script>
-
+        <script src="background.js" type="text/javascript" defer></script>
         <script type="text/javascript" charset="utf-8">
             window.onload = function () {
 
@@ -41,7 +41,8 @@
         </script>
     </head>
     <body>
-        <div id="titlebar">
+        <div id="background"></div>
+        <div id="titlebar" class="reverse_shadowed">
             Cryptography Through the Years
         </div>
 
@@ -50,7 +51,9 @@
                 <div id="infobox_container" class="shadowed"></div>
             </div>
         </div>
-        <p id="mini_info">Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library</p>
+        <div id="mini_info">
+        Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library
+        </div>
     </body>
 </html>
 

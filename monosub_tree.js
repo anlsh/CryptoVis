@@ -27,9 +27,18 @@ function draw_timeline(context, root_x = 100, root_y = 25) {
     var major_tick_attr = {"stroke": "#FF0000", "stroke-width": 6};
 
     var year_label_offset_y = 30;
+
+    /*
     var year_label_attr = {"fill": "#000",
         "font-size": "16px", "font-family": "Arial, Helvetica, sans-serif",
         "text-anchor": "middle"};
+    */
+    var year_label_attr = {
+        'fill'          :   '#000',
+        'font-size'     :   '16px',
+        'font-family'   :   '"Lucidia Console", Monaco, monospace',
+        'text-anchor'   :   'middle'
+    };
 
     var line = context.path("M " + root_x + " " + root_y + " l " + px_per_year * number_of_years + " 0");
     line.attr(main_line_attr);
@@ -52,16 +61,22 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
     var branch_name_offset_x = 5;
     var branch_name_offset_y = 20;
-    var branch_name_attr = {"fill": "#000",
-        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
-        "text-anchor": "start"};
+    var branch_name_attr = {
+        'fill'          :   '#000',
+        'font-size'     :   '32px',
+        'font-family'   :   '"Lucidia Console", Monaco, monospace',
+        'text-anchor'   :   'start'
+    };
     var branch_name_attr_animation = {"fill": "#000"};
 
     var temp_namebox_div;
     var namebox_offset_y = -30;
-    var namebox_draw_attr = {"fill": "#000",
-        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
-        "text-anchor": "middle"};
+    var namebox_draw_attr = {
+        'fill'          :   '#000',
+        'font-size'     :   '32px',
+        'font-family'   :   '"Lucidia Console", Monaco, monospace',
+        'text-anchor'   :   'middle'
+    };
 
     console.log("Drawing "+tree.name);
 
@@ -106,8 +121,8 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
             this.animate({"fill-opacity": hover_fill_opacity});
             $("#slider_container").removeAttr("right left");
-            $("#infobox_container").load("infofiles/infofile" + this.data("event_id")+".html");
-
+            //$("#infobox_container").load("infofiles/infofile" + this.data("event_id")+".html");
+            $("#infobox_container").html("<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c<br/>a<br/>c");
             if (event.offsetX < ($("#canvas").width() / 2)) {
 
                 console.log("Moving the div to the right of the canvas!");
