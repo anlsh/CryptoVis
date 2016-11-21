@@ -7,34 +7,23 @@
         <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="jquery-3.1.1.min.js"></script>
         <script src="monosub_tree.js" type="text/javascript" charset="utf-8"></script>
+        <script src="tree_sorter.js" type="text/javascript" charset="utf-8"></script>
+        <script src="tree_renderer.js" type="text/javascript" charset="utf-8"></script>
         <script src="background.js" type="text/javascript" defer></script>
         <script type="text/javascript" charset="utf-8">
             window.onload = function () {
 
-                INFO_BOX_WIDTH = 400;
-                KEEP_INFO_BOX = false;
-
-                var viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-                var viewport_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                function hScale(p1) {
-                    return p1 / 1442 * viewport_width;
-                }
-                function vScale(p2) {
-                    return p2 / 810 * viewport_height;
-                }
+                GLOBAL_INFO_BOX_WIDTH = 400;
+                GLOBAL_KEEP_INFO_BOX = false;
 
                 var r = Raphael("canvas", "100%", "100%");
 
                 sort_tree(monosub_tree);
-                console.log(monosub_tree);
-                console.log("HELLOOOO");
-                document.getElementById("mini_info").innerHTML = get_leaves(monosub_tree);
                 draw_tree(monosub_tree, r);
                 draw_timeline(r);
 
-                $("#slider_container").width = INFO_BOX_WIDTH;
-                $("#slider_container").right = -1 * INFO_BOX_WIDTH;
-                //$('svg').css('background-color', 'blue');
+                $("#slider_container").width = GLOBAL_INFO_BOX_WIDTH;
+                $("#slider_container").right = -1 * GLOBAL_INFO_BOX_WIDTH;
                 $('svg').css('overflow-x', 'auto');
             };
         </script>
@@ -52,9 +41,9 @@
             </div>
             <div id="canvas" class="shadowed">
             </div>
-            <div id="mini_info">
-                Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library
-            </div>
+        </div>
+        <div id="mini_info">
+            Created using <a href="https://dmitrybaranovskiy.github.io/raphael/">Raphaël</a>—JavaScript Vector Library
         </div>
     </body>
 </html>
