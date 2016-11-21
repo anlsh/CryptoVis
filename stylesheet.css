@@ -6,6 +6,7 @@ body {
     //"Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
     font-family: "Lucidia Console", Monaco, monospace;
     //position: relative;
+    overflow: hidden;
 }
 
 a {
@@ -51,7 +52,6 @@ a {
 
 .shadowed {
     box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.2);
-        //, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .reverse_shadowed {
     box-shadow: 0px -8px 8px 0px rgba(0, 0, 0, 0.15);
@@ -64,7 +64,7 @@ a {
     top: 0;
     right: -400px;
     fill-opacity: 0;
-    z-index: 0;
+    z-index: 90;
 }
 
 #infobox_container {
@@ -82,15 +82,23 @@ a {
 }
 
 #canvas {
+    height: 100%;
+    width: 100%;
     background-color: rgba(245, 245, 245, 0.87);
     position: relative;
+    margin: 0;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+#canvas-holder {
+    position:relative;
+    z-index: 1;
+    height: 610px;
+    width: 95%;
     margin: auto;
     margin-top: 0px;
-    width: 95%;
-    height: 630px;
     overflow: hidden;
-    overflow-x: scroll;
-    z-index: 1;
 }
 
 #titlebar {

@@ -24,10 +24,6 @@
                 }
 
                 var r = Raphael("canvas", "100%", "100%");
-                //r.rect(0, 0, 80, 80, 0).attr({id: "test", fill: "#f00"});
-
-                var px_per_year = 12;
-                var px_per_branch = 12;
 
                 sort_tree(monosub_tree);
                 console.log(monosub_tree);
@@ -38,6 +34,8 @@
 
                 $("#slider_container").width = INFO_BOX_WIDTH;
                 $("#slider_container").right = -1 * INFO_BOX_WIDTH;
+                //$('svg').css('background-color', 'blue');
+                $('svg').css('overflow-x', 'auto');
             };
         </script>
     </head>
@@ -47,14 +45,16 @@
             Cryptography Through the Years
         </div>
 
-        <div id="canvas" class="shadowed">
+        <div id="canvas-holder">
             <div id = "slider_container">
                 <div id="infobox_container" class="shadowed">
                 </div>
             </div>
-        </div>
-        <div id="mini_info">
-        Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library
+            <div id="canvas" class="shadowed">
+            </div>
+            <div id="mini_info">
+                Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library
+            </div>
         </div>
     </body>
 </html>

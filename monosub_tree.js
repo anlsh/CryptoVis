@@ -112,9 +112,20 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
         SLIDEOFF = "right";
 
+        var canvas_left_offset = $("#canvas").css('margin-left');
+        canvas_left_offset.replace('px', '');
+        canvas_left_offset = parseInt(canvas_left_offset) + 7;
+        console.log("The offset is " + canvas_left_offset);
+
+        var resting_left = canvas_left_offset - INFO_BOX_WIDTH;
+        // Where the left side rests when it is on the right side
+        var resting_right = canvas_left_offset + $("#canvas").width();
+
         event_circle.mouseover(function (event) {
 
-            GLOBAL_WHICH_EVENT.animate({"fill-opacity": default_fill_opacity});
+            try {
+                GLOBAL_WHICH_EVENT.animate({"fill-opacity": default_fill_opacity});
+            } catch (e) {}
             GLOBAL_WHICH_EVENT = this;
 
             this.animate({"fill-opacity": hover_fill_opacity});
@@ -125,9 +136,9 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
                     GLOBAL_WHICH_EVENT.animate({"fill-opacity": default_fill_opacity});
 
                     if (SLIDEOFF === "right") {
-                        $("#slider_container").animate({left: $("#canvas").width()});
+                        $("#slider_container").animate({left: resting_right});
                     } else {
-                        $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH});
+                        $("#slider_container").animate({left: resting_left});
                     }
                     KEEP_INFO_BOX = false;
                 }
@@ -137,14 +148,14 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
                 console.log("Moving the div to the right of the canvas!");
                 SLIDEOFF = "right";
-                $("#slider_container").animate({left: $("#canvas").width()}, 0);
-                $("#slider_container").animate({left: $("#canvas").width() - INFO_BOX_WIDTH});
+                $("#slider_container").animate({left: resting_right}, 0);
+                $("#slider_container").animate({left: resting_right - INFO_BOX_WIDTH});
             } else {
                 // The box should slide in from the left of the screen
                 console.log("Moving the div to the left of the canvas!");
                 SLIDEOFF = "left";
-                $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH}, 0);
-                $("#slider_container").animate({left: 0});
+                $("#slider_container").animate({left: resting_left}, 0);
+                $("#slider_container").animate({left: resting_left + INFO_BOX_WIDTH});
             }
         });
 
@@ -160,9 +171,9 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
                 this.animate({"fill-opacity": default_fill_opacity});
 
                 if (SLIDEOFF === "right") {
-                    $("#slider_container").animate({left: $("#canvas").width()});
+                    $("#slider_container").animate({left: resting_right});
                 } else {
-                    $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH});
+                    $("#slider_container").animate({left: resting_left});
                 }
             }
         });
