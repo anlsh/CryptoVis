@@ -7,11 +7,12 @@
         <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="jquery-3.1.1.min.js"></script>
         <script src="monosub_tree.js" type="text/javascript" charset="utf-8"></script>
-
+        <script src="background.js" type="text/javascript" defer></script>
         <script type="text/javascript" charset="utf-8">
             window.onload = function () {
 
                 INFO_BOX_WIDTH = 400;
+                KEEP_INFO_BOX = false;
 
                 var viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                 var viewport_height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -41,16 +42,20 @@
         </script>
     </head>
     <body>
-        <div id="titlebar">
+        <div id="background"></div>
+        <div id="titlebar" class="reverse_shadowed">
             Cryptography Through the Years
         </div>
 
         <div id="canvas" class="shadowed">
             <div id = "slider_container">
-                <div id="infobox_container" class="shadowed"></div>
+                <div id="infobox_container" class="shadowed">
+                </div>
             </div>
         </div>
-        <p id="mini_info">Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library</p>
+        <div id="mini_info">
+        Created using <a href="http://raphaeljs.com/">Raphaël</a>—JavaScript Vector Library
+        </div>
     </body>
 </html>
 

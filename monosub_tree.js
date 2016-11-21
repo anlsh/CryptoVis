@@ -17,7 +17,7 @@ var px_per_year = .6;
 
 function draw_timeline(context, root_x = 100, root_y = 25) {
 
-    var YEAR_OFFSET = 100;
+    var YEAR_OFFSET = 100
     // If you ever change that starting year... well, you'd better update the random offsets in this function
     var number_of_years = 2016 + YEAR_OFFSET;
     var major_tick_height = 30;
@@ -44,11 +44,20 @@ function draw_timeline(context, root_x = 100, root_y = 25) {
     }
 }
 
+GLOBAL_WHICH_EVENT = 0;
+
 function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
     var px_per_branch = 35;
-    var default_fill_opacity = .4;
+
+    // Event circle attributes
+    var event_circle_radius = 10;
     var hover_fill_opacity = .75;
+    var default_fill_opacity = .4;
+    var event_circle_draw_attrs = {stroke: "#00FF00", fill: "#00FF00","fill-opacity": .4}
+
+    // Branch attributes
+    var branch_draw_attrs = {"stroke": "#FF0000", "stroke-width": 6}
 
     var branch_name_offset_x = 5;
     var branch_name_offset_y = 20;
@@ -65,8 +74,9 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 
     console.log("Drawing "+tree.name);
 
+
     var path_ = context.path("M " + root_x + " " + root_y + " l " +
-        (tree.end_year - tree.start_year) * px_per_year + " 0").attr({"stroke": "#FF0000", "stroke-width": 6});
+        (tree.end_year - tree.start_year) * px_per_year + " 0").attr(branch_draw_attrs);
     path_.mouseover(function (event) {
         // Put a little div at the mouse to tell them the branch name
         temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
@@ -94,29 +104,34 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
             draw_x = root_x + (curr_event.year - tree.start_year) * px_per_year;
         }
 
-        for (var qq = 1; qq < tree.children.length + 1; qq++) {
-            var curr_branch = tree.children[qq -1];
-            context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*px_per_year)+" "+root_y+" l 0 "+
-                qq * px_per_branch).attr({"stroke": "#FF0000", "stroke-width": 6}).toBack();
-            draw_tree(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
-                root_y + qq * px_per_branch);
-        }
-
         // Draw events
-        context.circle(draw_x, root_y, 10).attr(
-            {stroke: "#FFFFFF", fill: "#FFFFFF","fill-opacity": 1});
-        var event_circle = context.circle(draw_x, root_y, 10).attr(
-            {stroke: "#00FF00", fill: "#00FF00","fill-opacity": .4});
-        event_circle.toFront();
+        context.circle(draw_x, root_y, event_circle_radius).attr(
+            {stroke: "#00FF00", fill: "#FFFFFF","fill-opacity": 1});
+        var event_circle = context.circle(draw_x, root_y, event_circle_radius).attr(event_circle_draw_attrs);
         event_circle.data("event_id", curr_event.id_);
 
         SLIDEOFF = "right";
 
         event_circle.mouseover(function (event) {
 
+            GLOBAL_WHICH_EVENT.animate({"fill-opacity": default_fill_opacity});
+            GLOBAL_WHICH_EVENT = this;
+
             this.animate({"fill-opacity": hover_fill_opacity});
             $("#slider_container").removeAttr("right left");
-            $("#infobox_container").load("infofiles/"+ this.data("event_id")+".html");
+            $("#infobox_container").load("infofiles/" + this.data("event_id")+".html", function() {
+                $("#infobox_container").prepend('<button id="xbox">Close</button>');
+                document.getElementById("xbox").onclick = function () {
+                    GLOBAL_WHICH_EVENT.animate({"fill-opacity": default_fill_opacity});
+
+                    if (SLIDEOFF === "right") {
+                        $("#slider_container").animate({left: $("#canvas").width()});
+                    } else {
+                        $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH});
+                    }
+                    KEEP_INFO_BOX = false;
+                }
+            });
 
             if (event.offsetX < ($("#canvas").width() / 2)) {
 
@@ -132,18 +147,33 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
                 $("#slider_container").animate({left: 0});
             }
         });
+
+        event_circle.mouseup(function () {
+            KEEP_INFO_BOX = true;
+        });
         event_circle.mouseout(function (event) {
 
             console.log("SLIDEOFF IS " + SLIDEOFF);
 
-            this.animate({"fill-opacity": default_fill_opacity});
+            if (!KEEP_INFO_BOX) {
+                GLOBAL_WHICH_EVENT = this;
+                this.animate({"fill-opacity": default_fill_opacity});
 
-            if (SLIDEOFF === "right") {
-                $("#slider_container").animate({left: $("#canvas").width()});
-            } else {
-                $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH});
+                if (SLIDEOFF === "right") {
+                    $("#slider_container").animate({left: $("#canvas").width()});
+                } else {
+                    $("#slider_container").animate({left: -1 * INFO_BOX_WIDTH});
+                }
             }
         });
+    }
+
+    for (var qq = 1; qq < tree.children.length + 1; qq++) {
+        var curr_branch = tree.children[qq -1];
+        context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*px_per_year)+" "+root_y+" l 0 "+
+                    qq * px_per_branch).attr(branch_draw_attrs);
+        draw_tree(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
+                    root_y + qq * px_per_branch);
     }
 
     var branch_namebox = context.text(root_x + branch_name_offset_x, root_y + branch_name_offset_y, tree.name);
@@ -190,173 +220,173 @@ var monosub_tree =
     "end_year": 50,
     "description": "The description for Caesar Ciphers",
     "events":
-    [
-        {
-            "name": "start",
-            "description": "Some description for Caesar Ciphers",
-            "id_": "caesar_invention"
-        },
-        {
-            "name": "end",
-            "description": "The end of the Caesar Cipher?",
-            "id_": "caesar_death"
-        }
-    ],
+        [
+            {
+                "name": "start",
+                "description": "Some description for Caesar Ciphers",
+                "id_": "caesar_invention"
+            },
+            {
+                "name": "end",
+                "description": "The end of the Caesar Cipher?",
+                "id_": "caesar_death"
+            }
+        ],
     "children":
-    [
-        {
-            "name": "Monosubstitution Cipher",
-            'id_': 0,
-            "start_year": 20,
-            "end_year": 1600,
-            "description": "Example dexcription",
-            "events":
-            [
-                {
-                    "name": "start",
-                    "description": "It got invented!",
-                    'id_': "monosub_invention"
-                },
-                {
-                    "name": "Frequency Analysis Invented",
-                    "description": "Freq Analysis Invention placeholder",
-                    "year": 800,
-                    'id_': "monosub_event_fa"
-                },
-                {
-                    "name": "end",
-                    "description": "Talk about the end of freq anal",
-                    "id_": "monosub_death"
-                }
-            ],
-            "children":
-            [
-                {
-                    "name": "Nomenclators",
-                    "start_year": 1500,
-                    "end_year": 1600,
-                    "description": "Placeholder desc for nomenclators",
-                    "events":
+        [
+            {
+                "name": "Monosubstitution Cipher",
+                'id_': 0,
+                "start_year": 20,
+                "end_year": 1600,
+                "description": "Example dexcription",
+                "events":
                     [
                         {
                             "name": "start",
-                            "description": "The invention of nomenclators",
-                            "id_": "nomenclator_invention"
+                            "description": "It got invented!",
+                            'id_': "monosub_invention"
+                        },
+                        {
+                            "name": "Frequency Analysis Invented",
+                            "description": "Freq Analysis Invention placeholder",
+                            "year": 800,
+                            'id_': "monosub_event_fa"
                         },
                         {
                             "name": "end",
-                            "description": "The end of nomenclators",
-                            "id_": "nomenclator_death"
+                            "description": "Talk about the end of freq anal",
+                            "id_": "monosub_death"
                         }
                     ],
-                    "children": []
-                },
-                {
-                    "name": "Null Ciphers",
-                    "start_year": 1500,
-                    "end_year": 1800,
-                    "description": "Placeholder for null cipher",
-                    "events":
+                "children":
                     [
                         {
-                            "name": "start",
-                            "description": "Null ciphers were invented!",
-                            "id_": "null_invention"
-                        },
-                        {
-                            "name": "end",
-                            "description": "These never really ended...",
-                            "id_": "null_death"
-                        }
-                    ],
-                    "children": []
-                },
-                {
-                    "name": "Vigenere Cipher",
-                    "start_year": 1400,
-                    "end_year": 1920,
-                    "description": "Placeholder desc for Vignere cipher",
-                    "events":
-                    [
-                        {
-                            "name": "start",
-                            "description": "Invention of the Vigne're Cipher",
-                            "id_": "vignere_invention"
-                        },
-                        {
-                            "name": "end",
-                            "description": "The breaking of the Vigne're Cipher",
-                            "id_": "vigenere_death"
-                        }
-                    ],
-                    "children":
-                    [
-                        {
-                            "name": "Engima",
-                            "start_year": 1700,
-                            "end_year": 1945,
-                            "description": "Description for Enigma",
+                            "name": "Nomenclators",
+                            "start_year": 1500,
+                            "end_year": 1600,
+                            "description": "Placeholder desc for nomenclators",
                             "events":
-                            [
-                                {
-                                    "name": "start",
-                                    "description": "The invention of the Enigma",
-                                    "id_": "enigma_invention"
-                                },
-                                {
-                                    "name": "end",
-                                    "description": "The end of the Enigma",
-                                    "id_": "enigma_death"
-                                }
-                            ],
-                            "children":
-                            [
-                                {
-                                    "name": "Lorenz Encryption",
-                                    "start_year": 1800,
-                                    "end_year": 1945,
-                                    "description": "Description for Lorenz Crypto",
-                                    "events":
-                                    [
-                                        {
-                                            "name": "start",
-                                            "description": "Invention!",
-                                            "id_": "lorenz_invention"
-                                        },
-                                        {
-                                            "name": "end",
-                                            "description": "The fall of the Lorenz Cipher",
-                                            "id_": "lorenz_death"
-                                        }
-                                    ],
-                                    "children": []
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Purple",
-                            "start_year": 1875,
-                            "end_year": 1946,
-                            "description": "Description for Purple",
-                            "events":
-                            [
-                                {
-                                    "name": "start",
-                                    "description": "The invention of Purple",
-                                    "id_": "purple_invention"
-
-                                },
-                                {
-                                    "name": "end",
-                                    "description": "The end of the Purple",
-                                    "id_": "purple_death"
-                                }
-                            ],
+                                [
+                                    {
+                                        "name": "start",
+                                        "description": "The invention of nomenclators",
+                                        "id_": "nomenclator_invention"
+                                    },
+                                    {
+                                        "name": "end",
+                                        "description": "The end of nomenclators",
+                                        "id_": "nomenclator_death"
+                                    }
+                                ],
                             "children": []
+                        },
+                        {
+                            "name": "Null Ciphers",
+                            "start_year": 1500,
+                            "end_year": 1800,
+                            "description": "Placeholder for null cipher",
+                            "events":
+                                [
+                                    {
+                                        "name": "start",
+                                        "description": "Null ciphers were invented!",
+                                        "id_": "null_invention"
+                                    },
+                                    {
+                                        "name": "end",
+                                        "description": "These never really ended...",
+                                        "id_": "null_death"
+                                    }
+                                ],
+                            "children": []
+                        },
+                        {
+                            "name": "Vigenere Cipher",
+                            "start_year": 1400,
+                            "end_year": 1920,
+                            "description": "Placeholder desc for Vignere cipher",
+                            "events":
+                                [
+                                    {
+                                        "name": "start",
+                                        "description": "Invention of the Vigne're Cipher",
+                                        "id_": "vignere_invention"
+                                    },
+                                    {
+                                        "name": "end",
+                                        "description": "The breaking of the Vigne're Cipher",
+                                        "id_": "vigenere_death"
+                                    }
+                                ],
+                            "children":
+                                [
+                                    {
+                                        "name": "Engima",
+                                        "start_year": 1700,
+                                        "end_year": 1945,
+                                        "description": "Description for Enigma",
+                                        "events":
+                                            [
+                                                {
+                                                    "name": "start",
+                                                    "description": "The invention of the Enigma",
+                                                    "id_": "enigma_invention"
+                                                },
+                                                {
+                                                    "name": "end",
+                                                    "description": "The end of the Enigma",
+                                                    "id_": "enigma_death"
+                                                }
+                                            ],
+                                        "children":
+                                            [
+                                                {
+                                                    "name": "Lorenz Encryption",
+                                                    "start_year": 1800,
+                                                    "end_year": 1945,
+                                                    "description": "Description for Lorenz Crypto",
+                                                    "events":
+                                                        [
+                                                            {
+                                                                "name": "start",
+                                                                "description": "Invention!",
+                                                                "id_": "lorenz_invention"
+                                                            },
+                                                            {
+                                                                "name": "end",
+                                                                "description": "The fall of the Lorenz Cipher",
+                                                                "id_": "lorenz_death"
+                                                            }
+                                                        ],
+                                                    "children": []
+                                                }
+                                            ]
+                                    },
+                                    {
+                                        "name": "Purple",
+                                        "start_year": 1875,
+                                        "end_year": 1946,
+                                        "description": "Description for Purple",
+                                        "events":
+                                            [
+                                                {
+                                                    "name": "start",
+                                                    "description": "The invention of Purple",
+                                                    "id_": "purple_invention"
+
+                                                },
+                                                {
+                                                    "name": "end",
+                                                    "description": "The end of the Purple",
+                                                    "id_": "purple_death"
+                                                }
+                                            ],
+                                        "children": []
+                                    }
+                                ]
                         }
                     ]
-                }
-            ]
-        }
-    ]
+            }
+        ]
 };

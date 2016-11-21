@@ -1,12 +1,23 @@
 body {
     background-color: #F0F0F0;
     color: #000;
-    font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
-    position: relative;
+    //font: 300
+    //100.1%
+    //"Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+    font-family: "Lucidia Console", Monaco, monospace;
+    //position: relative;
 }
 
 a {
     color: #00f;
+}
+
+.xbox {
+    color: #FF0000;
+    position:absolute;
+    top:0;
+    width: auto;
+    z-index:100;
 }
 
 .mini_code {
@@ -34,11 +45,16 @@ a {
 .info_img {
     width: 95%;
     height: auto;
+    display: block;
     margin: 0 auto;
 }
 
 .shadowed {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.2);
+        //, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.reverse_shadowed {
+    box-shadow: 0px -8px 8px 0px rgba(0, 0, 0, 0.15);
 }
 
 #slider_container {
@@ -48,26 +64,32 @@ a {
     top: 0;
     right: -400px;
     fill-opacity: 0;
-    z-index: 99;
+    z-index: 0;
 }
 
 #infobox_container {
     position: absolute;
+    z-index: 99;
     height: auto;
+    max-height: 90%;
     width: 95%;
-    background-color: aqua;
-    top: 50%; left: 50%;
+    background-color: rgba(255, 255, 255, 0.97);
+    top: 50%;
+    left: 50%;
     transform: translate(-50%,-50%);
+    margin: auto;
+    overflow-y: auto;
 }
 
 #canvas {
-    background-color: #F5F5F5;
-    border-radius: 0px;
+    background-color: rgba(245, 245, 245, 0.87);
     position: relative;
-    margin-left: 14px;
+    margin: auto;
+    margin-top: 0px;
     width: 95%;
-    height: 700px;
+    height: 630px;
     overflow: hidden;
+    overflow-x: scroll;
     z-index: 1;
 }
 
@@ -75,14 +97,31 @@ a {
     width: 95%;
     font-size: 30px;
     text-align: center;
+    margin: auto;
     margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    text-align: center;
+    background-color: rgba(245, 245, 245, .87);
 }
 
 #mini_info {
-    bottom: 0;
     font-size: .7em;
     position: absolute;
-    right: 1em;
+    bottom: 0px;
+    right: 0px;
     text-align: right;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+#background {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    word-wrap: break-word;
+    overflow-y: hidden;
+    color: #AAA;
+    z-index: -1;
 }
