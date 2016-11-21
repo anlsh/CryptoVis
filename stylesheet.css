@@ -13,12 +13,110 @@ a {
     color: #00f;
 }
 
-.xbox {
-    color: #FF0000;
-    position:absolute;
-    top:0;
-    width: auto;
-    z-index:100;
+/* Styling for the canvas elements, from most to least specific
+
+    The svg div (where all the drawing actually goes on), is styled
+    at the end of the onload() function in index.html
+*/
+
+svg {
+
+    /* Dont bother stying the svg here, everything is overwritten. Style it in
+    index.html instead*/
+    overflow-x: auto;
+    overflow-y: auto;
+    background-color: yellow;
+    z-index: 2;
+}
+
+#canvas {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(245, 245, 245, 0.87);
+    position: relative;
+    margin: 0;
+    overflow: auto;
+}
+
+#canvas-holder {
+    position:relative;
+    z-index: 1;
+    height: 650px;
+    width: 95%;
+    margin: auto;
+    margin-top: 0px;
+    /* If overflow is set to visible then the infobox will
+        be visible in its resting states
+    */
+    overflow: hidden;
+}
+
+/*
+    Styling for the sliding info box, again from most to least specific
+*/
+
+.info_heading {
+    font-size: 20px;
+    text-align: center;
+}
+.info_img {
+    width: 95%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.info {
+    padding: 10px;
+    padding-top: 5px;
+    overflow: hidden;
+}
+
+#infobox_container {
+    position: absolute;
+    z-index: 3;
+    height: auto;
+    max-height: 90%;
+    width: 95%;
+    background-color: rgba(255, 255, 255, 0.97);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    margin: auto;
+    overflow-y: auto;
+}
+
+#slider_container {
+    position: absolute;
+    height: 100%;
+    width: 400px;
+    top: 0;
+    right: -400px;
+    fill-opacity: 0;
+    z-index: 3;
+}
+/*
+    Miscellaneous styling
+*/
+
+.shadowed {
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.2);
+}
+.reverse_shadowed {
+    box-shadow: 0px -8px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+#titlebar {
+    width: 95%;
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    text-align: center;
+    background-color: rgba(245, 245, 245, .87);
 }
 
 .mini_code {
@@ -33,85 +131,6 @@ a {
 #vigenere {
     width: 50%;
     height: auto;
-}
-.info {
-    padding: 10px;
-    padding-top: 5px;
-    overflow: hidden;
-}
-.info_heading {
-    font-size: 20px;
-    text-align: center;
-}
-.info_img {
-    width: 95%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.shadowed {
-    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.2);
-}
-.reverse_shadowed {
-    box-shadow: 0px -8px 8px 0px rgba(0, 0, 0, 0.15);
-}
-
-#slider_container {
-    position: absolute;
-    height: 100%;
-    width: 400px;
-    top: 0;
-    right: -400px;
-    fill-opacity: 0;
-    z-index: 90;
-}
-
-#infobox_container {
-    position: absolute;
-    z-index: 99;
-    height: auto;
-    max-height: 90%;
-    width: 95%;
-    background-color: rgba(255, 255, 255, 0.97);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    margin: auto;
-    overflow-y: auto;
-}
-
-#canvas {
-    height: 100%;
-    width: 100%;
-    background-color: rgba(245, 245, 245, 0.87);
-    position: relative;
-    margin: 0;
-    overflow-y: hidden;
-    overflow-x: auto;
-}
-
-#canvas-holder {
-    position:relative;
-    z-index: 1;
-    height: 610px;
-    width: 95%;
-    margin: auto;
-    margin-top: 0px;
-    overflow: hidden;
-}
-
-#titlebar {
-    width: 95%;
-    font-size: 30px;
-    text-align: center;
-    margin: auto;
-    margin-top: 30px;
-    margin-bottom: 0px;
-    padding-bottom: 20px;
-    padding-top: 10px;
-    text-align: center;
-    background-color: rgba(245, 245, 245, .87);
 }
 
 #mini_info {
