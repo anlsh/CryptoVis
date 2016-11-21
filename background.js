@@ -13,7 +13,6 @@ function rstring(length) {
         } while(a === 0.0);
         ret += (1 / a).toString(36);
     }
-    console.log(ret);
     return ret;
 }
 console.log("beginning background");

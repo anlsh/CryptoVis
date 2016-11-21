@@ -6,7 +6,6 @@ GLOBAL_SLIDEOFF_DIR = "right";
 GLOBAL_WHICH_EVENT = 0;
 
 var px_per_branch = 35;
-var px_per_year = .6;
 
 // I assign to these variables down in slide_in_slider()
 var canvas_left_offset = 0;
@@ -16,12 +15,12 @@ var resting_right = 0;
 
 function draw_timeline(context, root_x = 100, root_y = 25) {
 
-    var YEAR_OFFSET = 100;
+    // How many years BC do we want to go?
     // If you ever change that starting year... well, you'd better update the random offsets in this function
-    var number_of_years = 2016 + YEAR_OFFSET;
-    var major_tick_height = 30;
+    var number_of_years = GLOBAL_TIMELINE_END - GLOBAL_TIMELINE_START;
 
     // Styles
+    var major_tick_height = 30;
     var main_line_attr = {"stroke": "#FF0000", "stroke-width": 6};
     var major_tick_attr = {"stroke": "#FF0000", "stroke-width": 6};
 
@@ -30,15 +29,15 @@ function draw_timeline(context, root_x = 100, root_y = 25) {
         "font-size": "16px", "font-family": "Arial, Helvetica, sans-serif",
         "text-anchor": "middle"};
 
-    var line = context.path("M " + root_x + " " + root_y + " l " + px_per_year * number_of_years + " 0");
+    var line = context.path("M " + root_x + " " + root_y + " l " + GLOBAL_PX_PER_YEAR * number_of_years + " 0");
     line.attr(main_line_attr);
 
     for (var qqq = 0; qqq < number_of_years; qqq++) {
         if (qqq % 100 === 0) {
-            context.path("M " + (root_x + (qqq * px_per_year))+ " " +
+            context.path("M " + (root_x + (qqq * GLOBAL_PX_PER_YEAR))+ " " +
                 (root_y - (major_tick_height / 2)) + " l 0 " + major_tick_height).attr(major_tick_attr);
-            context.text((root_x + (qqq * px_per_year)), root_y + year_label_offset_y,
-                qqq - YEAR_OFFSET).attr(year_label_attr);
+            context.text((root_x + (qqq * GLOBAL_PX_PER_YEAR)), root_y + year_label_offset_y,
+                qqq + GLOBAL_TIMELINE_START).attr(year_label_attr);
         }
     }
 }
@@ -61,7 +60,7 @@ function draw_branches(tree, context, root_x = 100, root_y = 100) {
         "text-anchor": "middle"};
 
     var path_ = context.path("M " + root_x + " " + root_y + " l " +
-        (tree.end_year - tree.start_year) * px_per_year + " 0").attr(branch_draw_attrs);
+        (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_draw_attrs);
     path_.mouseover(function (event) {
         // Put a little div at the mouse to tell them the branch name
         temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
@@ -78,9 +77,9 @@ function draw_branches(tree, context, root_x = 100, root_y = 100) {
 
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
-        context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*px_per_year)+" "+root_y+" l 0 "+
+        context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR)+" "+root_y+" l 0 "+
             qq * px_per_branch).attr(branch_draw_attrs);
-        draw_branches(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
+        draw_branches(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
             root_y + qq * px_per_branch);
     }
 }
@@ -100,12 +99,12 @@ function draw_events(tree, context, root_x = 100, root_y = 100) {
         var draw_x = 0;
 
         if (curr_event.name === "start") {
-            draw_x = (tree.start_year * px_per_year);
+            draw_x = (tree.start_year * GLOBAL_PX_PER_YEAR);
             draw_x = root_x;
         } else if (curr_event.name === "end") {
-            draw_x = root_x + (tree.end_year - tree.start_year) * px_per_year;
+            draw_x = root_x + (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR;
         } else {
-            draw_x = root_x + (curr_event.year - tree.start_year) * px_per_year;
+            draw_x = root_x + (curr_event.year - tree.start_year) * GLOBAL_PX_PER_YEAR;
         }
 
         // Draw events
@@ -139,7 +138,7 @@ function draw_events(tree, context, root_x = 100, root_y = 100) {
 
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
-        draw_events(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
+        draw_events(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
             root_y + qq * px_per_branch);
     }
 }
@@ -155,7 +154,7 @@ function draw_nameboxes(tree, context, root_x = 100, root_y = 100) {
 
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
-        draw_nameboxes(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*px_per_year),
+        draw_nameboxes(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
             root_y + qq * px_per_branch);
     }
 

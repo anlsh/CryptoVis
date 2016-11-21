@@ -20,12 +20,6 @@ a {
 */
 
 svg {
-
-    /* Dont bother stying the svg here, everything is overwritten. Style it in
-    index.html instead*/
-    overflow-x: auto;
-    overflow-y: auto;
-    background-color: yellow;
     z-index: 2;
 }
 
