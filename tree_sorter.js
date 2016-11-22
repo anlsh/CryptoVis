@@ -15,7 +15,6 @@ function compare_by_children(a, b) {
     } else if (get_leaves(a) < get_leaves(b)) {
         return 1
     } else {
-        console.log(a.name + " " + b.name + " are equal by branches");
         return -1 * (a.start_year - b.start_year);
     }
 }
