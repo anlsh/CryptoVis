@@ -41,26 +41,30 @@ function is_blocked(layer, start_year, end_year) {
     return false;
 }
 
-function draw_tree(tree, context, root_x = 100, root_y = 100, starting_layer) {
+function draw_tree(tree, context, root_x, root_y, starting_layer) {
     display_blocks = [];
-    draw_branches(tree, context, root_x, root_y, starting_layer, true);
+    draw_branches(tree, context, root_x, root_y, starting_layer, undefined);
     display_blocks = [];
     draw_events(tree, context, root_x, root_y, starting_layer);
     display_blocks = [];
     draw_nameboxes(tree, context, root_x, root_y, starting_layer);
 }
 
-function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer, primary_call=false) {
+function draw_branches(tree, context, root_x, root_y, starting_layer, parent) {
 
     // Branch attributes
     var branch_default_attrs = {"stroke": "#FF0000", "stroke-width": 6};
+    var cracked_branch_default_attrs = {"stroke": "#FF0000", "stroke-width": 6, "opacity": .3};
 
     var temp_namebox_div;
-    var namebox_offset_y = -30;
-    var namebox_draw_attr = {"fill": "#000",
+    var temp_namebox_offset_y = -30;
+    var temp_namebox_draw_attr = {"fill": "#000",
         "font-size": "10px", "font-family": "Arial, Helvetica, sans-serif",
         "text-anchor": "middle"};
 
+    if (tree.crack_year === undefined) {
+        tree.crack_year = tree.end_year;
+    }
     // Check for blocks, preferring to be drawn at the 0 block
     var draw_layer = starting_layer;
     while (is_blocked(draw_layer, tree.start_year, tree.end_year)) {
@@ -75,29 +79,57 @@ function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer
     var y_draw_level = root_y + draw_layer * GLOBAL_PX_PER_BRANCH;
 
     // Connect the path to its parent
-    if (!primary_call) {
+    if (parent !== undefined) {
+        var attrs_draw_with = branch_default_attrs;
+        if (tree.start_year > parent.crack_year) {
+            attrs_draw_with = cracked_branch_default_attrs;
+        } else {
+            attrs_draw_with = branch_default_attrs;
+        }
         context.path("M " + root_x + " " + y_draw_level + " l 0 " +
-            ((draw_layer - starting_layer + 1) * -GLOBAL_PX_PER_BRANCH)).attr(branch_default_attrs);
+            ((draw_layer - starting_layer + 1) * -GLOBAL_PX_PER_BRANCH)).attr(attrs_draw_with);
     }
 
-    var time_path = context.path("M " + root_x + " " + y_draw_level + " l " +
-        (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_default_attrs);
-    time_path.data("event_id", tree.id_);
-
-    time_path.mouseover(function (event) {
+    var uncracked_path = context.path("M " + root_x + " " + y_draw_level + " l " +
+        (tree.crack_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_default_attrs);
+    uncracked_path.data("event_id", tree.id_);
+    uncracked_path.mouseover(function (event) {
         // Put a little div at the mouse to tell them the branch name
-        temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
-            tree.name + "(click for details)").attr(namebox_draw_attr);
+        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
+            tree.name + "(click for details)").attr(temp_namebox_draw_attr);
     });
-    time_path.mousemove(function (event) {
+    uncracked_path.mousemove(function (event) {
         temp_namebox_div.remove();
-        temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
-            tree.name + "(click for details)").attr(namebox_draw_attr);
+        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
+            tree.name + "(click for details)").attr(temp_namebox_draw_attr);
     });
-    time_path.mouseout(function () {
+    uncracked_path.mouseout(function () {
         temp_namebox_div.remove();
     });
-    time_path.mouseup(function (ev) {
+    uncracked_path.mouseup(function (ev) {
+        mouse_event_offset_x = ev.offsetX;
+        GLOBAL_KEEP_INFO_BOX = true;
+        slide_in_slider(filepath_from_id(this.data("event_id")), this);
+    });
+
+    var cracked_path = context.path("M " + (root_x + (tree.crack_year - tree.start_year) * GLOBAL_PX_PER_YEAR)
+        + " " + y_draw_level + " l " + ((tree.end_year - tree.crack_year) * GLOBAL_PX_PER_YEAR)
+        + " 0").attr(cracked_branch_default_attrs);
+    cracked_path.data("event_id", tree.id_);
+    cracked_path.mouseover(function (event) {
+        // Put a little div at the mouse to tell them the branch name
+        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
+            tree.name + "(cracked)").attr(temp_namebox_draw_attr);
+    });
+    cracked_path.mousemove(function (event) {
+        temp_namebox_div.remove();
+        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
+            tree.name + "(cracked)").attr(temp_namebox_draw_attr);
+    });
+    cracked_path.mouseout(function () {
+        temp_namebox_div.remove();
+    });
+    cracked_path.mouseup(function (ev) {
         mouse_event_offset_x = ev.offsetX;
         GLOBAL_KEEP_INFO_BOX = true;
         slide_in_slider(filepath_from_id(this.data("event_id")), this);
@@ -106,7 +138,7 @@ function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
         draw_branches(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
-            root_y, draw_layer + 1);
+            root_y, draw_layer + 1, tree);
     }
 }
 
@@ -238,7 +270,7 @@ function draw_timeline(context, root_x = 100, root_y = 25) {
     var line = context.path("M " + root_x + " " + root_y + " l " + GLOBAL_PX_PER_YEAR * number_of_years + " 0");
     line.attr(main_line_attr);
 
-    for (var qqq = 0; qqq < number_of_years; qqq++) {
+    for (var qqq = 0; qqq <= number_of_years; qqq++) {
         if (qqq % 100 === 0) {
             context.path("M " + (root_x + (qqq * GLOBAL_PX_PER_YEAR))+ " " +
                 (root_y - (major_tick_height / 2)) + " l 0 " + major_tick_height).attr(major_tick_attr);

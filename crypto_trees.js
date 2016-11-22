@@ -36,6 +36,7 @@ var monosub_tree =
             {
                 "name": "Monosubstitution Cipher",
                 "start_year": 20,
+                "crack_year": 800,
                 "end_year": 1600,
                 "id_": "monosub_desc",
                 "events":
@@ -102,7 +103,8 @@ var monosub_tree =
                         {
                             "name": "Vigenere Cipher",
                             "start_year": 1553,
-                            "end_year": 1846,
+                            "crack_year": 1846,
+                            "end_year": 1940,
                             "id_": "vigenere_desc",
                             "events":
                                 [
@@ -112,8 +114,8 @@ var monosub_tree =
                                         "id_": "vignere_invention"
                                     },
                                     {
-                                        "name": "end",
-                                        "description": "The breaking of the Vigne're Cipher",
+                                        "name": "crack",
+                                        "year": 1846,
                                         "id_": "vigenere_death"
                                     }
                                 ],
