@@ -7,17 +7,16 @@ function sort_tree(tree) {
     for (var ii = 0; ii < tree.children.length; ii++) {
         sort_tree(tree.children[ii]);
     }
-    console.log("Sorted version of " + tree.name);
-    console.log(tree);
 }
 
 function compare_by_children(a, b) {
     if (get_leaves(a) > get_leaves(b)) {
-        return 1;
+        return -1;
     } else if (get_leaves(a) < get_leaves(b)) {
-        return -1
+        return 1
     } else {
-        return 0;
+        console.log(a.name + " " + b.name + " are equal by branches");
+        return -1 * (a.start_year - b.start_year);
     }
 }
 

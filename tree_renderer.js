@@ -13,8 +13,9 @@ var canvas_left_offset = 0;
 var resting_left = 0;
 var resting_right = 0;
 
-var deanimate = function() {};
+// Oh boy, this is going to be a doozy
 
+var display_blocks = [];
 
 function draw_timeline(context, root_x = 100, root_y = 25) {
 
@@ -237,7 +238,6 @@ function slide_in_slider(filepath, event_trigger) {
         slide_in_slider_(filepath);
     }
 }
-
 function slide_out_slider() {
     deanimate();
     var goto;
@@ -259,3 +259,5 @@ function slide_out_slider() {
 function filepath_from_id(str) {
     return ("infofiles/" + str +".html");
 }
+
+var deanimate = function() {};
