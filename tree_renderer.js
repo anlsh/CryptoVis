@@ -208,7 +208,7 @@ function draw_nameboxes(tree, context, root_x = 100, root_y = 100, starting_laye
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
         draw_nameboxes(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
-            y_draw_level, draw_layer + 1);
+            root_y, draw_layer + 1);
     }
 
     var branch_namebox = context.text(root_x + branch_name_offset_x, y_draw_level + branch_name_offset_y, tree.name);
