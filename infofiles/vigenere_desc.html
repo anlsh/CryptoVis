@@ -1,0 +1,27 @@
+<div class="info">
+    <p class="info_heading">The Mechanics of the Vigenere Cipher</p>
+    <div class="mini_code">
+        <p>Number of ways a message can be enciphered: 26! * 26, or 10^28</p>
+        <p>Ease of encryption: High</p>
+        <p>Security: Low</p>
+    </div>
+    <p>The Vigenere Cipher works essentially through combining several Caesar ciphers. Similarly to the the
+        monosubstitution cipher, those using the Vigenere Cipher to communicate first choose a keyphrase, such as
+    "TIMERULES" Then, the first letter of the message of the message is encrypted using the Caesar-shifted alphabet
+    starting with "T", the the second letter encrypted with the alphabet starting with "I", and so on. Once all letters
+    of the keyphrase have been used up, the user restarts at the beginning of the keyword.</p>
+    <p><img src="infofiles/res/vigenere_square.png" class="info_img"></p>
+    <div class="image_subtext">
+        A Vignere Square
+    </div>
+    <p>Using the Vignere Cipher and the keyword "TIMERULES", the message "This is a super secret message" encrypts to
+    "mpuw zm l wmimd wvwcil fmewrap"</p>
+    <p>The Vigenere Cipher offers two major advantages over a traditional monosubstitution cipher. One is that the same
+    letter in the plaintext may encipher to different letters. For instance, the "i" in "This" enciphers to "p",
+    but the "i" in "is" enciphers to "z". The Vigenere's Cipher's second advantage is that the same letter in the
+        ciphertext may, depending on its position,
+    represent different letters in the plaintext. The combination of these two traits makes the Vignere Cipher
+    completely impervious to traditional frequency analysis.</p>
+    <p>You can play with Vigenere encipherment and decipherment
+        <a href="http://www.cs.du.edu/~snarayan/crypt/vigenere.html">at this website</a></p>
+</div>

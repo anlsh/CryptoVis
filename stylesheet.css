@@ -60,6 +60,14 @@ svg {
     margin: 0 auto;
 }
 
+.image_subtext {
+    text-align:center;
+    width: 100%;
+    font-size: 13px;
+    display: block;
+    margin-top: 5px;
+}
+
 .info {
     padding: 10px;
     padding-top: 5px;

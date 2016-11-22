@@ -17,7 +17,7 @@ var monosub_tree =
     "name": "Caesar Cipher",
     "start_year": -100,
     "end_year": 50,
-    "description": "The description for Caesar Ciphers",
+    "id_": "caesar_desc",
     "events":
         [
             {
@@ -35,10 +35,9 @@ var monosub_tree =
         [
             {
                 "name": "Monosubstitution Cipher",
-                'id_': 0,
                 "start_year": 20,
                 "end_year": 1600,
-                "description": "Example dexcription",
+                "id_": "monosub_desc",
                 "events":
                     [
                         {
@@ -64,7 +63,7 @@ var monosub_tree =
                             "name": "Nomenclators",
                             "start_year": 1500,
                             "end_year": 1600,
-                            "description": "Placeholder desc for nomenclators",
+                            "id_": "nomenclator_desc",
                             "events":
                                 [
                                     {
@@ -84,7 +83,7 @@ var monosub_tree =
                             "name": "Null Ciphers",
                             "start_year": 1500,
                             "end_year": 1800,
-                            "description": "Placeholder for null cipher",
+                            "id_": "null_desc",
                             "events":
                                 [
                                     {
@@ -102,9 +101,9 @@ var monosub_tree =
                         },
                         {
                             "name": "Vigenere Cipher",
-                            "start_year": 1400,
-                            "end_year": 1920,
-                            "description": "Placeholder desc for Vignere cipher",
+                            "start_year": 1553,
+                            "end_year": 1846,
+                            "id_": "vigenere_desc",
                             "events":
                                 [
                                     {
@@ -122,9 +121,9 @@ var monosub_tree =
                                 [
                                     {
                                         "name": "Engima",
-                                        "start_year": 1700,
-                                        "end_year": 1945,
-                                        "description": "Description for Enigma",
+                                        "start_year": 1918,
+                                        "end_year": 1941,
+                                        "id_": "enigma_desc",
                                         "events":
                                             [
                                                 {
@@ -141,10 +140,31 @@ var monosub_tree =
                                         "children":
                                             [
                                                 {
+                                                    "name": "Purple",
+                                                    "start_year": 1930,
+                                                    "end_year": 1941,
+                                                    "id_": "purple_desc",
+                                                    "events":
+                                                        [
+                                                            {
+                                                                "name": "start",
+                                                                "description": "The invention of Purple",
+                                                                "id_": "purple_invention"
+
+                                                            },
+                                                            {
+                                                                "name": "end",
+                                                                "description": "The end of the Purple",
+                                                                "id_": "purple_death"
+                                                            }
+                                                        ],
+                                                    "children": []
+                                                },
+                                                {
                                                     "name": "Lorenz Encryption",
-                                                    "start_year": 1800,
-                                                    "end_year": 1945,
-                                                    "description": "Description for Lorenz Crypto",
+                                                    "start_year": 1935,
+                                                    "end_year": 1944,
+                                                    "id_": "lorenz_desc",
                                                     "events":
                                                         [
                                                             {
@@ -161,27 +181,6 @@ var monosub_tree =
                                                     "children": []
                                                 }
                                             ]
-                                    },
-                                    {
-                                        "name": "Purple",
-                                        "start_year": 1875,
-                                        "end_year": 1946,
-                                        "description": "Description for Purple",
-                                        "events":
-                                            [
-                                                {
-                                                    "name": "start",
-                                                    "description": "The invention of Purple",
-                                                    "id_": "purple_invention"
-
-                                                },
-                                                {
-                                                    "name": "end",
-                                                    "description": "The end of the Purple",
-                                                    "id_": "purple_death"
-                                                }
-                                            ],
-                                        "children": []
                                     }
                                 ]
                         }

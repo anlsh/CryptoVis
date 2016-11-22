@@ -4,13 +4,16 @@
 
 GLOBAL_SLIDEOFF_DIR = "right";
 GLOBAL_WHICH_EVENT = 0;
-
-var px_per_branch = 35;
+var must_refresh_slider = false;
+var filepath_ = "";
+var mouse_event_offset_x;
 
 // I assign to these variables down in slide_in_slider()
 var canvas_left_offset = 0;
 var resting_left = 0;
 var resting_right = 0;
+
+var deanimate = function() {};
 
 
 function draw_timeline(context, root_x = 100, root_y = 25) {
@@ -51,46 +54,54 @@ function draw_tree(tree, context, root_x = 100, root_y = 100) {
 function draw_branches(tree, context, root_x = 100, root_y = 100) {
 
     // Branch attributes
-    var branch_draw_attrs = {"stroke": "#FF0000", "stroke-width": 6};
+    var branch_default_attrs = {"stroke": "#FF0000", "stroke-width": 6};
 
     var temp_namebox_div;
     var namebox_offset_y = -30;
     var namebox_draw_attr = {"fill": "#000",
-        "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
+        "font-size": "10px", "font-family": "Arial, Helvetica, sans-serif",
         "text-anchor": "middle"};
 
     var path_ = context.path("M " + root_x + " " + root_y + " l " +
-        (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_draw_attrs);
+        (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_default_attrs);
+    path_.data("event_id", tree.id_);
+
     path_.mouseover(function (event) {
         // Put a little div at the mouse to tell them the branch name
         temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
-            tree.name).attr(namebox_draw_attr);
+            tree.name + "(click for details)").attr(namebox_draw_attr);
     });
     path_.mousemove(function (event) {
         temp_namebox_div.remove();
         temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
-            tree.name).attr(namebox_draw_attr);
+            tree.name + "(click for details)").attr(namebox_draw_attr);
     });
     path_.mouseout(function () {
         temp_namebox_div.remove();
+    });
+    path_.mouseup(function (ev) {
+        mouse_event_offset_x = ev.offsetX;
+        GLOBAL_KEEP_INFO_BOX = true;
+        slide_in_slider(filepath_from_id(this.data("event_id")), this);
     });
 
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
         context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR)+" "+root_y+" l 0 "+
-            qq * px_per_branch).attr(branch_draw_attrs);
+            qq * GLOBAL_PX_PER_BRANCH).attr(branch_default_attrs);
         draw_branches(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
-            root_y + qq * px_per_branch);
+            root_y + qq * GLOBAL_PX_PER_BRANCH);
     }
 }
+
+// False for offscreen and true for on
+var slider_state = false;
 
 function draw_events(tree, context, root_x = 100, root_y = 100) {
 
     // Event circle attributes
     var event_circle_radius = 10;
-    var hover_fill_opacity = .75;
-    var default_fill_opacity = .4;
-    var event_circle_draw_attrs = {stroke: "#00FF00", fill: "#00FF00","fill-opacity": .4};
+    var event_circle_default_attrs = {stroke: "#00FF00", fill: "#00FF00","fill-opacity": .4};
     var event_circle_animation_attrs = {stroke: "#00FF00", fill: "#FFFFFF","fill-opacity": 1};
 
 
@@ -107,20 +118,30 @@ function draw_events(tree, context, root_x = 100, root_y = 100) {
             draw_x = root_x + (curr_event.year - tree.start_year) * GLOBAL_PX_PER_YEAR;
         }
 
-        // Draw events
+        // Draw event circle
         context.circle(draw_x, root_y, event_circle_radius).attr(event_circle_animation_attrs);
-        var event_circle = context.circle(draw_x, root_y, event_circle_radius).attr(event_circle_draw_attrs);
+        var event_circle = context.circle(draw_x, root_y, event_circle_radius).attr(event_circle_default_attrs);
 
         event_circle.data("event_id", curr_event.id_);
 
-        event_circle.mouseover(function (event) {
-            try {
-                GLOBAL_WHICH_EVENT.animate({"fill-opacity": default_fill_opacity});
-            } catch (e) {}
-            GLOBAL_WHICH_EVENT = this;
-            this.animate({"fill-opacity": hover_fill_opacity});
+        // Set event handlers
+        event_circle.mouseover(function (ev) {
 
-            slide_in_slider("infofiles/" + this.data("event_id")+".html");
+            mouse_event_offset_x = ev.offsetX;
+
+            if (GLOBAL_WHICH_EVENT !== this) {
+                GLOBAL_KEEP_INFO_BOX = false;
+            }
+
+            try {
+                GLOBAL_WHICH_EVENT.animate(event_circle_default_attrs);
+            } catch (e) {}
+
+            this.animate(event_circle_animation_attrs);
+            var event_path = filepath_from_id(this.data("event_id"));
+
+            slide_in_slider(event_path, this);
+            GLOBAL_WHICH_EVENT = this;
         });
 
         event_circle.mouseup(function () {
@@ -129,9 +150,12 @@ function draw_events(tree, context, root_x = 100, root_y = 100) {
 
         event_circle.mouseout(function () {
             if (!GLOBAL_KEEP_INFO_BOX) {
-                GLOBAL_WHICH_EVENT = this;
-                this.animate({"fill-opacity": default_fill_opacity});
+                this.animate(event_circle_default_attrs);
                 slide_out_slider();
+            } else {
+                deanimate = function () {
+                    GLOBAL_WHICH_EVENT.animate(event_circle_default_attrs);
+                }
             }
         });
     }
@@ -139,7 +163,7 @@ function draw_events(tree, context, root_x = 100, root_y = 100) {
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
         draw_events(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
-            root_y + qq * px_per_branch);
+            root_y + qq * GLOBAL_PX_PER_BRANCH);
     }
 }
 
@@ -155,14 +179,16 @@ function draw_nameboxes(tree, context, root_x = 100, root_y = 100) {
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
         draw_nameboxes(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
-            root_y + qq * px_per_branch);
+            root_y + qq * GLOBAL_PX_PER_BRANCH);
     }
 
     var branch_namebox = context.text(root_x + branch_name_offset_x, root_y + branch_name_offset_y, tree.name);
     branch_namebox.attr(branch_name_attr);
 }
 
-function slide_in_slider(filepath) {
+function slide_in_slider_(filepath) {
+
+    // This does that actual moving of the slider
 
     canvas_left_offset = $("#canvas").css('margin-left');
     canvas_left_offset.replace('px', '');
@@ -183,7 +209,7 @@ function slide_in_slider(filepath) {
         }
     });
 
-    if (event.offsetX < ($("#canvas").width() / 2)) {
+    if (mouse_event_offset_x < ($("#canvas").width() / 2)) {
 
         console.log("Moving the div to the right of the canvas!");
         GLOBAL_SLIDEOFF_DIR = "right";
@@ -196,12 +222,40 @@ function slide_in_slider(filepath) {
         $("#slider_container").animate({left: resting_left}, 0);
         $("#slider_container").animate({left: resting_left + GLOBAL_INFO_BOX_WIDTH});
     }
+
+    slider_state = true;
+}
+function slide_in_slider(filepath, event_trigger) {
+
+    if (event_trigger === GLOBAL_WHICH_EVENT && slider_state) {return 0;}
+    if (event_trigger !== GLOBAL_WHICH_EVENT && slider_state) {
+        console.log("A different event has been passed in, refreshing slider");
+        filepath_ = filepath;
+        must_refresh_slider = true;
+        slide_out_slider();
+    } else {
+        slide_in_slider_(filepath);
+    }
 }
 
 function slide_out_slider() {
+    deanimate();
+    var goto;
     if (GLOBAL_SLIDEOFF_DIR === "right") {
-        $("#slider_container").animate({left: resting_right});
+        goto = resting_right;
     } else {
-        $("#slider_container").animate({left: resting_left});
+        goto = resting_left
     }
+    $("#slider_container").animate({left: goto}, function () {
+        slider_state = false;
+        if (must_refresh_slider) {
+            console.log("Bringing in the slider right away!");
+            slide_in_slider_(filepath_);
+            must_refresh_slider = false;
+        }
+    });
+}
+
+function filepath_from_id(str) {
+    return ("infofiles/" + str +".html");
 }
