@@ -43,14 +43,14 @@ function is_blocked(layer, start_year, end_year) {
 
 function draw_tree(tree, context, root_x = 100, root_y = 100, starting_layer) {
     display_blocks = [];
-    draw_branches(tree, context, root_x, root_y, starting_layer);
+    draw_branches(tree, context, root_x, root_y, starting_layer, true);
     display_blocks = [];
     draw_events(tree, context, root_x, root_y, starting_layer);
     display_blocks = [];
     draw_nameboxes(tree, context, root_x, root_y, starting_layer);
 }
 
-function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer) {
+function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer, primary_call=false) {
 
     // Branch attributes
     var branch_default_attrs = {"stroke": "#FF0000", "stroke-width": 6};
@@ -72,24 +72,32 @@ function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer
     var to_append = [draw_layer, tree.start_year, tree.end_year, tree.name];
     display_blocks.push(to_append);
 
-    var path_ = context.path("M " + root_x + " " + (root_y + draw_layer * GLOBAL_PX_PER_BRANCH) + " l " +
-        (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_default_attrs);
-    path_.data("event_id", tree.id_);
+    var y_draw_level = root_y + draw_layer * GLOBAL_PX_PER_BRANCH;
 
-    path_.mouseover(function (event) {
+    // Connect the path to its parent
+    if (!primary_call) {
+        context.path("M " + root_x + " " + y_draw_level + " l 0 " +
+            ((draw_layer - starting_layer + 1) * -GLOBAL_PX_PER_BRANCH)).attr(branch_default_attrs);
+    }
+
+    var time_path = context.path("M " + root_x + " " + y_draw_level + " l " +
+        (tree.end_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_default_attrs);
+    time_path.data("event_id", tree.id_);
+
+    time_path.mouseover(function (event) {
         // Put a little div at the mouse to tell them the branch name
         temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
             tree.name + "(click for details)").attr(namebox_draw_attr);
     });
-    path_.mousemove(function (event) {
+    time_path.mousemove(function (event) {
         temp_namebox_div.remove();
         temp_namebox_div = context.text(event.offsetX, event.offsetY + namebox_offset_y,
             tree.name + "(click for details)").attr(namebox_draw_attr);
     });
-    path_.mouseout(function () {
+    time_path.mouseout(function () {
         temp_namebox_div.remove();
     });
-    path_.mouseup(function (ev) {
+    time_path.mouseup(function (ev) {
         mouse_event_offset_x = ev.offsetX;
         GLOBAL_KEEP_INFO_BOX = true;
         slide_in_slider(filepath_from_id(this.data("event_id")), this);
@@ -97,10 +105,6 @@ function draw_branches(tree, context, root_x = 100, root_y = 100, starting_layer
 
     for (var qq = 1; qq < tree.children.length + 1; qq++) {
         var curr_branch = tree.children[qq -1];
-        // Dont draw the connecting lines for now
-        //context.path("M " + (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR)+" "+
-        //    (root_y + draw_layer * GLOBAL_PX_PER_BRANCH) +" l 0 "+
-        //    qq * GLOBAL_PX_PER_BRANCH).attr(branch_default_attrs);
         draw_branches(curr_branch, context, (root_x + (curr_branch.start_year - tree.start_year)*GLOBAL_PX_PER_YEAR),
             root_y, draw_layer + 1);
     }
