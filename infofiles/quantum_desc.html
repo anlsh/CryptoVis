@@ -1,0 +1,41 @@
+<div class="info">
+    <p class="info_heading">The Mechanics of Quantum Cryptography</p>
+    <div class="mini_code">
+        <p>Number of ways a message can be enciphered: Infinite</p>
+        <p>Ease of encryption: Low</p>
+        <p>Security: Provably Undecipherable</p>
+    </div>
+    <p>Quantum cryptography is a completely new cryptosystem which has only begun to emerge in recent decades. The
+    appeal of quantum cryptography lies in the fact that it is totally and completely uncrackable. Save for any radical
+    changes to our current model of physics, no message sent through a quantum communication system can ever be
+    deciphered by anyone but the intended recipient.</p>
+    <p>The natural question to ask is, how? The answer lies in the fact that quantum cryptography relies neither on
+    cipher alphabets, nor on one-way functions, but on the (extremely strange) properties of quantum particles such
+    as photons. Quantum cryptography relies on a property of photons known as spin- any given photon has a horizontal
+    spin (left or right), or a vertical spin (up or down). The spin of a photon can be manipulated and measured
+    through the use of polarizers.</p>
+    <p>If Alice and Bob wish to communicate with each other using a quantum cryptographic system, then the process
+    is as follows.</p>
+    <p>1. Alice sends Bob a stream of photons. Alice uses her polarizers to give subsets of photons a random spin in
+        horizontal and vertical direction, and records what spin she gives these sets</p>
+    <p>2. On the receiving end, Bob guesses which filters to use to measure each set of photons. If he uses the wrong
+        filter (for instance, using a vertical filter to measure a horizontally polarized set of photons), then the
+        photons will split into two groups, and Bob will realize he guessed wrong. If he guesses right, then Bob
+    will measure the direction of the photon's spin along its axis accurately.</p>
+    <p>3. After finishing the initial stream, Alice publicly transmits the set of axes each set of photons was
+    polarized along (but not the direction in which the photons were polarized). Bob then publicly confirms to Alice
+    which sets of photons he guessed correctly. The specific directions of the sets which Bob guessed correctly, which
+    Alice and Bob never broadcast, form a secure key which the two can use to encrypt further communications.</p>
+    <p>Suppose that Eve is attempting to listen in on Alice and Bob and intercepts a set of photons polarized
+    horizontally. If she uses a horizontally polarized filter to measure them, then no harm, no foul. If, however,
+    she guesses wrong and uses the vertical filter to measure them, then the photons will pass through with random spins
+    along the y-axis. If Bob uses the horizontal filter to measure these intercepted photons (as he will about half
+        the time), then he will assume that he guessed wrong. However during step 3, when Alice reveals that she
+        polarized the intercepted set horizontally, Bob will instantly realize that the photons were altered along the
+        way, and cut off communication with Alice. This is the second chief advantage of quantum cryptography- due to
+        the Heisenberg Uncertainty Principle, the very act of observing the message changes it
+    </p>
+    <p>For more information on quantum cryptography, check out
+        <a href="http://searchsecurity.techtarget.com/definition/quantum-cryptography">this website on the subject
+        </a></p>
+</div>

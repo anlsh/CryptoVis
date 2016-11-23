@@ -1,0 +1,20 @@
+<div class="info">
+    <p class="info_heading">The Mechanics of RSA</p>
+    <div class="mini_code">
+        <p>Number of ways a message can be enciphered: Theoretically infinite, around 10^77 on most modern systems</p>
+        <p>Ease of encryption: High</p>
+        <p>Security: High*</p>
+    </div>
+    <p>RSA is also based upon one-way functions, but differs significantly from the Diffie-Hellman system. The
+    RSA system works as follows- each party on the internet has a public key and a private key. The public key is freely
+    available to any other person upon request, whereas the private key must <b>never</b> be shared with anybody else.
+    When one party wishes to send a secret message to the other, the sender looks up the recipient's public key and
+    encrypts the message with it.</p>
+    <p>Crucially, the encrypted message is infeasible for anyone (including the sender) to decipher without the
+        recipient's private key. Therefore,
+        the encrypted message may be sent freely, as the recipient is the only one who can decrypt it within a
+        reasonable time.</p>
+    <p>The RSA algorithm is the algorithm used to encrypt virtually all traffic on the internet today.</p>
+    <p><img src="infofiles/res/rsa.jpg"></p>
+    <div class="image_subtext">An illustration of the RSA system.</div>
+</div>

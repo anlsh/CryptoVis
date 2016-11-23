@@ -8,6 +8,7 @@
         <script src="jquery-3.1.1.min.js"></script>
         <script src="crypto_trees.js" type="text/javascript" charset="utf-8"></script>
         <script src="tree_sorter.js" type="text/javascript" charset="utf-8"></script>
+        <script src="slider_manipulator.js" type="text/javascript" defer></script>
         <script src="tree_renderer.js" type="text/javascript" charset="utf-8"></script>
         <script src="background.js" type="text/javascript" defer></script>
         <script type="text/javascript" charset="utf-8">
@@ -15,30 +16,25 @@
 
                 GLOBAL_INFO_BOX_WIDTH = 400;
                 GLOBAL_KEEP_INFO_BOX = false;
-                //GLOBAL_PX_PER_YEAR = .6;
+
                 GLOBAL_PX_PER_YEAR = 3;
-                GLOBAL_PX_PER_BRANCH = 40;
+                GLOBAL_PX_PER_BRANCH = 65;
                 GLOBAL_CANVAS_RIGHT_PADDING = 100;
-
-
-                var timeline_root_x = 100;
 
                 GLOBAL_TIMELINE_START = -100;
                 GLOBAL_TIMELINE_END = 2100;
 
-                //var r = Raphael("canvas", (timeline_root_x +
-                //    ((GLOBAL_TIMELINE_START - GLOBAL_TIMELINE_END) * GLOBAL_PX_PER_YEAR)) + "px", "70%");
+                var timeline_root_x = 100;
                 var r = Raphael("canvas",
                         (timeline_root_x + ((GLOBAL_TIMELINE_END - GLOBAL_TIMELINE_START) * GLOBAL_PX_PER_YEAR)
                         + GLOBAL_CANVAS_RIGHT_PADDING) + "px",
                         "99%");
 
-                draw_timeline(r, timeline_root_x);
-                sort_tree(monosub_tree);
-
                 var t_t = timeline_root_x;
                 var t_w = -1 * (GLOBAL_TIMELINE_START - monosub_tree.start_year) * GLOBAL_PX_PER_YEAR;
 
+                draw_timeline(r, timeline_root_x);
+                sort_tree(monosub_tree);
                 draw_tree(monosub_tree, r, (t_t + t_w), 100, 0);
 
                 $("#slider_container").width = GLOBAL_INFO_BOX_WIDTH;

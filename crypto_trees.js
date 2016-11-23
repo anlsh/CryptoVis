@@ -165,7 +165,8 @@ var monosub_tree =
                                                 {
                                                     "name": "Lorenz Encryption",
                                                     "start_year": 1935,
-                                                    "end_year": 1944,
+                                                    "crack_year": 1944,
+                                                    "end_year": 1977,
                                                     "id_": "lorenz_desc",
                                                     "events":
                                                         [
@@ -175,12 +176,54 @@ var monosub_tree =
                                                                 "id_": "lorenz_invention"
                                                             },
                                                             {
-                                                                "name": "end",
+                                                                "name": "crack",
+                                                                "year": 1944,
                                                                 "description": "The fall of the Lorenz Cipher",
                                                                 "id_": "lorenz_death"
                                                             }
                                                         ],
-                                                    "children": []
+                                                    "children": [
+                                                        {
+                                                            "name": "Diffie-Hellman",
+                                                            "detached": false,
+                                                            "start_year": 1976,
+                                                            "end_year": 2016,
+                                                            "id_": "diffie_desc",
+                                                            events: [
+                                                                {
+                                                                    "name": "start",
+                                                                    "id_": "diffie_invention"
+                                                                }
+                                                            ],
+                                                            children: [
+                                                                {
+                                                                    "name": "RSA",
+                                                                    "start_year": 1977,
+                                                                    "end_year": 2016,
+                                                                    "id_": "rsa_desc",
+                                                                    "events":
+                                                                        [
+                                                                            {
+                                                                                "name": "start",
+                                                                                "description": "Invention!",
+                                                                                "id_": "rsa_invention"
+                                                                            }
+                                                                        ],
+                                                                    "children": [
+                                                                        {
+                                                                            "name": "Quantum Cryptography",
+                                                                            "start_year": 2004,
+                                                                            "end_year": 2016,
+                                                                            "id_": "quantum_desc",
+                                                                            "detached": true,
+                                                                            "events": [],
+                                                                            "children": []
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                     }

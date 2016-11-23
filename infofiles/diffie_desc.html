@@ -1,0 +1,20 @@
+<div class="info">
+    <p class="info_heading">The Mechanics of Diffie-Hellman Encryption</p>
+    <div class="mini_code">
+        <p>Number of ways a message can be enciphered: Theoretically infinite, around 10^77 on most modern systems</p>
+        <p>Ease of encryption: High</p>
+        <p>Security: High*</p>
+    </div>
+    <p>Diffie-Hellman can be considered one of the first sophisticated "mathematical encryption" algorithms.
+        It is based not just upon scrambling of letters and redirection of output, but upon  one-way
+        functions such as the natural logarithm. A function is generally said to be one-way if, given an output
+    of the function, it is either infeasible or impossible to guess the input- these for functions are ideal for
+    cryptography as, even if an encrypted message is intercepted, decoding it is extremely difficult.</p>
+    <p>The Diffie-Hellman system is illustrated as follows, where the colors are analogous to extremely
+    large prime numbers. The final mixture is a common key, which both parties use to encrypt further communications</p>
+    <p><img src="infofiles/res/diffie_diagram.png" class="info_img"></p>
+    <p>The crucial thing to notice of this algorithm is that Alice and Bob <b>never share their secret colors
+    with each other.</b> At no point is that information ever broadcast. Thus, even if an eavesdropper intercepted the
+        mixture during the public transfer, they would have to brute-force their way through an almost innumerably
+    vast number of possible keys to determine the secret colors Alice and Bob used.</p>
+</div>

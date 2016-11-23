@@ -4,19 +4,11 @@
 
 GLOBAL_SLIDEOFF_DIR = "right";
 GLOBAL_WHICH_EVENT = 0;
-var must_refresh_slider = false;
-var filepath_ = "";
-var mouse_event_offset_x;
 
-// I assign to these variables down in slide_in_slider()
-var canvas_left_offset = 0;
-var resting_left = 0;
-var resting_right = 0;
+var deanimate = function() {};
+GLOBAL_MOUSE_EVENT_X = 0;
 
 // False for offscreen and true for on
-var slider_state = false;
-
-// Oh boy, this is going to be a doozy
 
 var display_blocks = [];
 
@@ -55,12 +47,16 @@ function draw_branches(tree, context, root_x, root_y, starting_layer, parent) {
     // Branch attributes
     var branch_default_attrs = {"stroke": "#FF0000", "stroke-width": 6};
     var cracked_branch_default_attrs = {"stroke": "#FF0000", "stroke-width": 6, "opacity": .3};
+    var background_rectangle_attrs = {"fill": "#000000"};
+    var temp_str = 0;
 
-    var temp_namebox_div;
     var temp_namebox_offset_y = -30;
-    var temp_namebox_draw_attr = {"fill": "#000",
-        "font-size": "10px", "font-family": "Arial, Helvetica, sans-serif",
-        "text-anchor": "middle"};
+
+    var temp_namebox_draw_attr = {"fill": "#FFF",
+        "font-size": "15px", "font-family": "Arial, Helvetica, sans-serif",
+        "text-anchor": "start"};
+
+    var temp_label = [];
 
     if (tree.crack_year === undefined) {
         tree.crack_year = tree.end_year;
@@ -79,35 +75,46 @@ function draw_branches(tree, context, root_x, root_y, starting_layer, parent) {
     var y_draw_level = root_y + draw_layer * GLOBAL_PX_PER_BRANCH;
 
     // Connect the path to its parent
+    var is_detached = false;
     if (parent !== undefined) {
-        var attrs_draw_with = branch_default_attrs;
-        if (tree.start_year > parent.crack_year) {
-            attrs_draw_with = cracked_branch_default_attrs;
-        } else {
-            attrs_draw_with = branch_default_attrs;
+        try {
+            is_detached = tree.detached;
+        } catch (e) {}
+        if (!is_detached) {
+            var attrs_draw_with = branch_default_attrs;
+            if (tree.start_year > parent.crack_year) {
+                attrs_draw_with = cracked_branch_default_attrs;
+            } else {
+                attrs_draw_with = branch_default_attrs;
+            }
+            context.path("M " + root_x + " " + y_draw_level + " l 0 " +
+                ((draw_layer - starting_layer + 1) * -GLOBAL_PX_PER_BRANCH)).attr(attrs_draw_with);
         }
-        context.path("M " + root_x + " " + y_draw_level + " l 0 " +
-            ((draw_layer - starting_layer + 1) * -GLOBAL_PX_PER_BRANCH)).attr(attrs_draw_with);
     }
 
     var uncracked_path = context.path("M " + root_x + " " + y_draw_level + " l " +
         (tree.crack_year - tree.start_year) * GLOBAL_PX_PER_YEAR + " 0").attr(branch_default_attrs);
     uncracked_path.data("event_id", tree.id_);
     uncracked_path.mouseover(function (event) {
+        temp_str = tree.name + " (click for details)";
         // Put a little div at the mouse to tell them the branch name
-        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
-            tree.name + "(click for details)").attr(temp_namebox_draw_attr);
+        temp_label = draw_text_with_background_rect(temp_str, event.offsetX,
+            event.offsetY + temp_namebox_offset_y,
+            temp_namebox_draw_attr, background_rectangle_attrs, context);
     });
     uncracked_path.mousemove(function (event) {
-        temp_namebox_div.remove();
-        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
-            tree.name + "(click for details)").attr(temp_namebox_draw_attr);
+        temp_label[0].remove();
+        temp_label[1].remove();
+        temp_label = draw_text_with_background_rect(temp_str, event.offsetX,
+            event.offsetY + temp_namebox_offset_y,
+            temp_namebox_draw_attr, background_rectangle_attrs, context);
     });
     uncracked_path.mouseout(function () {
-        temp_namebox_div.remove();
+        temp_label[0].remove();
+        temp_label[1].remove();
     });
     uncracked_path.mouseup(function (ev) {
-        mouse_event_offset_x = ev.offsetX;
+        GLOBAL_MOUSE_EVENT_X = ev.offsetX;
         GLOBAL_KEEP_INFO_BOX = true;
         slide_in_slider(filepath_from_id(this.data("event_id")), this);
     });
@@ -115,22 +122,28 @@ function draw_branches(tree, context, root_x, root_y, starting_layer, parent) {
     var cracked_path = context.path("M " + (root_x + (tree.crack_year - tree.start_year) * GLOBAL_PX_PER_YEAR)
         + " " + y_draw_level + " l " + ((tree.end_year - tree.crack_year) * GLOBAL_PX_PER_YEAR)
         + " 0").attr(cracked_branch_default_attrs);
+
     cracked_path.data("event_id", tree.id_);
+
     cracked_path.mouseover(function (event) {
-        // Put a little div at the mouse to tell them the branch name
-        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
-            tree.name + "(cracked)").attr(temp_namebox_draw_attr);
+        temp_str = tree.name + " (cracked)";
+        temp_label = draw_text_with_background_rect(temp_str, event.offsetX,
+                                                    event.offsetY + temp_namebox_offset_y,
+                                                    temp_namebox_draw_attr, background_rectangle_attrs, context);
     });
     cracked_path.mousemove(function (event) {
-        temp_namebox_div.remove();
-        temp_namebox_div = context.text(event.offsetX, event.offsetY + temp_namebox_offset_y,
-            tree.name + "(cracked)").attr(temp_namebox_draw_attr);
+        temp_label[0].remove();
+        temp_label[1].remove();
+        temp_label = draw_text_with_background_rect(temp_str, event.offsetX,
+                                                    event.offsetY + temp_namebox_offset_y,
+                                                    temp_namebox_draw_attr, background_rectangle_attrs, context);
     });
     cracked_path.mouseout(function () {
-        temp_namebox_div.remove();
+        temp_label[0].remove();
+        temp_label[1].remove();
     });
     cracked_path.mouseup(function (ev) {
-        mouse_event_offset_x = ev.offsetX;
+        GLOBAL_MOUSE_EVENT_X = ev.offsetX;
         GLOBAL_KEEP_INFO_BOX = true;
         slide_in_slider(filepath_from_id(this.data("event_id")), this);
     });
@@ -181,7 +194,7 @@ function draw_events(tree, context, root_x = 100, root_y = 100, starting_layer) 
         // Set event handlers
         event_circle.mouseover(function (ev) {
 
-            mouse_event_offset_x = ev.offsetX;
+            GLOBAL_MOUSE_EVENT_X = ev.offsetX;
 
             if (GLOBAL_WHICH_EVENT !== this) {
                 GLOBAL_KEEP_INFO_BOX = false;
@@ -224,10 +237,14 @@ function draw_events(tree, context, root_x = 100, root_y = 100, starting_layer) 
 function draw_nameboxes(tree, context, root_x = 100, root_y = 100, starting_layer) {
 
     var branch_name_offset_x = 5;
-    var branch_name_offset_y = 20;
+    var branch_name_offset_y = 27;
     var branch_name_attr = {"fill": "#000",
         "font-size": "32px", "font-family": "Arial, Helvetica, sans-serif",
         "text-anchor": "start"};
+    var name_bounding_box_attr ={"stroke-opacity": .5, "fill": "#FFF8DC"};
+    var name_bounding_box_corner_rad = 10;
+    var name_bounding_box_yoffset = -15;
+    var name_bounding_box_xpadding = 7;
 
     var draw_layer = starting_layer;
     while (is_blocked(draw_layer, tree.start_year, tree.end_year)) {
@@ -247,8 +264,8 @@ function draw_nameboxes(tree, context, root_x = 100, root_y = 100, starting_laye
             root_y, draw_layer + 1);
     }
 
-    var branch_namebox = context.text(root_x + branch_name_offset_x, y_draw_level + branch_name_offset_y, tree.name);
-    branch_namebox.attr(branch_name_attr);
+    draw_text_with_background_rect(tree.name, root_x + branch_name_offset_x, y_draw_level + branch_name_offset_y,
+                                    branch_name_attr, name_bounding_box_attr, context, true);
 }
 
 function draw_timeline(context, root_x = 100, root_y = 25) {
@@ -280,77 +297,18 @@ function draw_timeline(context, root_x = 100, root_y = 25) {
     }
 }
 
-function slide_in_slider_(filepath) {
+function draw_text_with_background_rect(str, x, y, str_attrs, rect_attrs, context, fug_y = false) {
+    var fug_factor = -7;
+    var x_padding = 10;
+    var y_padding = 7;
 
-    // This does that actual moving of the slider
+    var draw_txt = context.text(x, y, str).attr(str_attrs);
+    var y_level = y - y_padding + (fug_y ? fug_factor : 0);
+    var backgrnd_rect = context.rect(x - x_padding, y_level,
+        draw_txt.getBBox().width + 2 * x_padding, draw_txt.getBBox().height, 3).attr(rect_attrs);
+    draw_txt.remove();
 
-    canvas_left_offset = $("#canvas").css('margin-left');
-    canvas_left_offset.replace('px', '');
-    canvas_left_offset = parseInt(canvas_left_offset) + 7;
+    draw_txt = context.text(x, y, str).attr(str_attrs);
 
-    resting_left = canvas_left_offset - GLOBAL_INFO_BOX_WIDTH;
-    // Where the left side rests when it is on the right side
-    resting_right = canvas_left_offset + $("#canvas").width();
-
-    $("#slider_container").removeAttr("right left");
-    $("#infobox_container").load(filepath, function() {
-        $("#infobox_container").prepend('<button id="xbox">Close</button>');
-        document.getElementById("xbox").onclick = function () {
-
-            GLOBAL_KEEP_INFO_BOX = false;
-
-            slide_out_slider();
-        }
-    });
-
-    if (mouse_event_offset_x < ($("#canvas").width() / 2)) {
-
-        GLOBAL_SLIDEOFF_DIR = "right";
-        $("#slider_container").animate({left: resting_right}, 0);
-        $("#slider_container").animate({left: resting_right - GLOBAL_INFO_BOX_WIDTH});
-    } else {
-        // The box should slide in from the left of the screen
-        GLOBAL_SLIDEOFF_DIR = "left";
-        $("#slider_container").animate({left: resting_left}, 0);
-        $("#slider_container").animate({left: resting_left + GLOBAL_INFO_BOX_WIDTH});
-    }
-
-    slider_state = true;
+    return [draw_txt, backgrnd_rect];
 }
-
-function slide_in_slider(filepath, event_trigger) {
-
-    if (event_trigger === GLOBAL_WHICH_EVENT && slider_state) {return 0;}
-    if (event_trigger !== GLOBAL_WHICH_EVENT && slider_state) {
-        //console.log("A different event has been passed in, refreshing slider");
-        filepath_ = filepath;
-        must_refresh_slider = true;
-        slide_out_slider();
-    } else {
-        slide_in_slider_(filepath);
-    }
-}
-
-function slide_out_slider() {
-    deanimate();
-    var goto;
-    if (GLOBAL_SLIDEOFF_DIR === "right") {
-        goto = resting_right;
-    } else {
-        goto = resting_left
-    }
-    $("#slider_container").animate({left: goto}, function () {
-        slider_state = false;
-        if (must_refresh_slider) {
-            //console.log("Bringing in the slider right away!");
-            slide_in_slider_(filepath_);
-            must_refresh_slider = false;
-        }
-    });
-}
-
-function filepath_from_id(str) {
-    return ("infofiles/" + str +".html");
-}
-
-var deanimate = function() {};
